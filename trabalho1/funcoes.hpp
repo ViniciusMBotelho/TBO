@@ -12,6 +12,8 @@ void printLista(int lista[]){
 		cout << endl;
 }
 
+// testando colaborador git
+
 int* randomLista(int lista[]){
 	
 	for(unsigned i=0; i<TAM; i++){
