@@ -11,7 +11,7 @@ int main(){
 	lista.iniciaLista();
 	lista.inserePos(0, 1);
 	lista.inserePos(1, 2);
-	// lista.inserePos(2, 3);
+	lista.inserePos(2, 3);
 	lista.imprime();
 
 }

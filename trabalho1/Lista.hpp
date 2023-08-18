@@ -59,7 +59,7 @@ class Lista{
 		void imprime(){
 			No* noAux = cabeca->prox;
 
-			while(noAux != NULL){
+			for(int i=0; i<tam; i++){
 				cout << noAux->val << " ";
 				noAux = noAux->prox;
 			}
