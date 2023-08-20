@@ -1,35 +1,21 @@
 #include<iostream>
 #include<cstdlib>
-#include"funcoes.hpp"
+#include"Lista.hpp"
 
 using namespace std;
 
-void printLista(int lista[]);
-int* randomLista(int lista[]);
-int* lerLista(int lista[], int quant);
-int buscaValor(int lista[], int val);
-void inserePosicao(int lista[], int pos);
-
 int main(){
-	int lista[TAM],opcao,quant;
+	
+	Lista lista;
+	lista.iniciaLista();
 
+	int tmp;
+	// for(int i=0; i<3; i++){
+	// 	cin >> tmp;
+	// }
+	lista.inserePos(0, 1);
+	lista.inserePos(1, 2);
+	lista.inserePos(1, 3);
 
-	randomLista(lista);
-	lerLista(lista);
-	printLista(lista);
-	buscaValor(lista,2);
-	inserePosicao(lista,3);
-
-
-	cin >> opcao;
-	switch(opcao){
-		case 1:{
-			cin >> quant;
-			lerLista(lista, quant);
-			break;
-		} 
-	}
-
-
-	return 0;
+	lista.imprime();
 }
