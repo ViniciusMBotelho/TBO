@@ -28,33 +28,30 @@ class Lista{
 			return true;
 		}
 
-		bool inserePos(int pos, int val){
+		void inserePos(int pos, int val){
 			if(pos > tam)
-				return false;
+				return;
 			
+			No* noAux = cabeca;
 			No* novoNo = new No;
 			novoNo->val = val;
 			int i;
 
-			//lista vazia
-			if(cabeca->prox == NULL){
-				cabeca->prox = novoNo;
-				novoNo->prox = NULL;
+			for(i=0; i<pos; i++){  // para 1 no antes
+				noAux = noAux->prox;
 			}
-			else{  // lista não vazia
-				No* noAux = cabeca;
-				for(i=0; i<pos; i++){
-					noAux = noAux->prox;
-				}
-				novoNo->prox = noAux->prox;
-				noAux->prox = novoNo;
-			}
-			//inseriu na última posição
+			novoNo->prox = noAux->prox;
+			noAux->prox = novoNo;  // ta morrendo aqui
+			cout << "a ";  // teste
+
 			cauda = i == pos ? novoNo : cauda;
 			tam++;
-
-			return true;
 		}
+
+		// void aleatorio(int tam, int range){
+
+
+		// }
 
 		void imprime(){
 			No* noAux = cabeca->prox;
