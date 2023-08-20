@@ -19,7 +19,7 @@ class Lista{
 
 	public:
 		bool iniciaLista(){
-			No* cabeca = new No;
+			cabeca = new No;
 			cabeca->prox = NULL;
 			cauda = cabeca;
 			tam = 0;
@@ -41,17 +41,16 @@ class Lista{
 				noAux = noAux->prox;
 			}
 			novoNo->prox = noAux->prox;
-			noAux->prox = novoNo;  // ta morrendo aqui
-			cout << "a ";  // teste
+			noAux->prox = novoNo;
 
 			cauda = i == pos ? novoNo : cauda;
 			tam++;
 		}
 
-		// void aleatorio(int tam, int range){
+		void aleatorio(int tam, int range){
+			
 
-
-		// }
+		}
 
 		void imprime(){
 			No* noAux = cabeca->prox;
