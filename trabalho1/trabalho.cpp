@@ -22,17 +22,16 @@ int main(){
 	cout << "Lista 1: " << endl;
 	lista1.imprime();
 
-	// lista2.aleatorio(5, 1, 4);
-	// cout << "Lista 2: " << endl;
-	// lista2.imprime();
+	lista2.aleatorio(5, 1, 4);
+	cout << "Lista 2: " << endl;
+	lista2.imprime();
 
-	// No* noTmp = lista1.busca(2);
-	// if(noTmp != nullptr)
-	// 	cout << noTmp->val;
-	// else
-	// 	cout << "Valor nao encontrado" << endl;
+	No* noTmp = lista1.busca(2);
+	if(noTmp != nullptr)
+		cout << noTmp->val << endl;
 
 	lista1.transposicao(lista1.busca(1), lista1.busca(2));
 	lista1.imprime();
 	lista1.imprimeInv();
+	cout << lista1.minimo()->val << endl;
 }
