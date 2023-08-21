@@ -58,6 +58,7 @@
   "C_Cpp.errorSquiggles": "disabled",
   "files.associations": {
     "*.c": "c",
-    "random": "cpp"
+    "random": "cpp",
+    "iostream": "cpp"
   }
 }

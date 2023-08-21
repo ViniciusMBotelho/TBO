@@ -69,7 +69,10 @@ class Lista{
 			return nullptr;
 		}
 
-		void transposicao(No* ref1, No* ref2){
+		void transposicao(int n1, int n2){
+			No* ref1 = busca(n1);
+			No* ref2 = busca(n2);
+
 			if(ref1 == nullptr || ref2 == nullptr)
 				return;
 

@@ -74,7 +74,10 @@ class ListaD{
 			return nullptr;
 		}
 
-		void transposicao(NoD* ref1, NoD* ref2){
+		void transposicao(int n1, int n2){
+			NoD* ref1 = busca(n1);
+			NoD* ref2 = busca(n2);
+
 			if(ref1 == nullptr || ref2 == nullptr)
 				return;
 
@@ -97,14 +100,10 @@ class ListaD{
 			
 			NoD* noAux = cabeca->antec;
 			
-			//cria um array de referências dos nós
 			while(noAux != cabeca){
 				cout << noAux->val << " ";
 				noAux = noAux->antec;
 			}
-			// for(int i=tam-1; i>=0; i--){
-			// }
-			// cout << endl;
 		}
 
 		NoD* minimo(){  // numero de acessos nos campos???
@@ -112,7 +111,7 @@ class ListaD{
 			NoD* noAux = cabeca->prox;
 			NoD* minRef = noAux;
 
-			while(noAux != NULL){
+			while(noAux != cabeca){
 				if(noAux->val < minRef->val)
 					minRef = noAux;
 
