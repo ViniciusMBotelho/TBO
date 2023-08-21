@@ -9,14 +9,18 @@ using namespace std;
 
 int main(){
 	
-	// LISTA SIMPLES
-	cout << "LISTA LIGADA SIMPLES" << endl;
-
-	Lista listaS;
 	int tam = 10;
 	int vet[tam] = {8, 1, 3, 4, 3, 6, 10, 8, 9, 1};
 
+	// LISTA SIMPLES
+
+	cout << "LISTA LIGADA SIMPLES" << endl;
+
+	Lista listaS;
+	Lista listaSA;
+
 	listaS.iniciaLista();
+	listaSA.iniciaLista();
 
 	for(int i=0; i<tam; i++){
 		listaS.inserePos(i, vet[i]);
@@ -39,13 +43,26 @@ int main(){
 	listaS.imprime();
 
 	cout << listaS.minimo()->val << endl;  // Mostra posição do predecessor???
+	listaS.imprimeInv();
+
+	cout << endl << endl << "LISTA ENCADEADA ALEATORIA" << endl;
+
+	listaSA.aleatorio(100, 1, 1000);
+	listaSA.imprime();
+	cout << listaSA.minimo()->val << endl;
+	listaSA.imprimeInv();
+
 
 	// LISTA DUPLAMENTE LIGADA
+
 	cout << endl << "lISTA DUPLAMENTE LIGADA" << endl;
 
 	ListaD listaD;
+	ListaD listaDA;
 
 	listaD.iniciaLista();
+	listaDA.iniciaLista();
+
 	for(int i=0; i<tam; i++){
 		listaD.inserePos(i, vet[i]);
 	}
@@ -58,7 +75,7 @@ int main(){
 
 	cout << listaD.busca(10)->val << endl;
 	cout << listaD.busca(8)->val << endl;
-	listaD.busca(12) == nullptr ? cout << "" : cout << listaD.busca(12)->val;
+	listaD.busca(12) == nullptr ? cout << "" : cout << listaD.busca(12)->val;  // assim para tratar o retorno nullptr ??? 
 
 	listaD.transposicao(3, 4);
 	listaD.transposicao(0, 6);
@@ -66,4 +83,12 @@ int main(){
 	listaD.imprime();
 
 	cout << listaD.minimo()->val << endl;  // Mostra posição do predecessor???
+	listaD.imprimeInv();
+
+	cout << endl << endl << "LISTA DUPLAMENTE ENCADEADA ALEATORIA" << endl;
+
+	listaDA.aleatorio(100, 1, 1000);
+	listaDA.imprime();
+	cout << listaDA.minimo()->val << endl;
+	listaDA.imprimeInv();
 }
