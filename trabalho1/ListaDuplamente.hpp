@@ -6,22 +6,25 @@
 
 using namespace std;
 
-class No{
+class NoD{
 	public:
-		No* prox;
+		NoD* prox;
+        NoD* antec;
 		int val;
 };
 
-class Lista{
+class ListaD{
 
 	private:
 		int tam;
-		No* cabeca;
+		NoD* cabeca;
 
 	public:
 		bool iniciaLista(){
-			cabeca = new No;
-			cabeca->prox = NULL;
+			cabeca = new NoD;
+			cabeca->prox = cabeca;
+			cabeca->antec = cabeca;
+
 			tam = 0;
 
 			// false se n alocar (fazer) 
@@ -32,16 +35,18 @@ class Lista{
 			if(pos > tam)
 				return;
 			
-			No* noAux = cabeca;
-			No* novoNo = new No;
+			NoD* noAux = cabeca;
+			NoD* novoNo = new NoD;
 			novoNo->val = val;
 			int i;
 
-			for(i=0; i<pos; i++){  // para 1 no antes
+			for(i=0; i<pos; i++){  // para 1 NoD antes
 				noAux = noAux->prox;
 			}
 			novoNo->prox = noAux->prox;
+            novoNo->antec = noAux;
 			noAux->prox = novoNo;
+            novoNo->prox->antec = novoNo;
 
 			tam++;
 		}
@@ -57,9 +62,9 @@ class Lista{
 			tam = tam;
 		}
 
-		No* busca(int val){  // não entendi a parte de contar o numero de acessos a estrutura
+		NoD* busca(int val){  // não entendi a parte de contar o numero de acessos a estrutura
 
-			No* noAux = cabeca;
+			NoD* noAux = cabeca;
 			for(int i=0; i<tam; i++){
 				noAux = noAux->prox;
 				if(noAux->val == val)
@@ -69,7 +74,7 @@ class Lista{
 			return nullptr;
 		}
 
-		void transposicao(No* ref1, No* ref2){
+		void transposicao(NoD* ref1, NoD* ref2){
 			if(ref1 == nullptr || ref2 == nullptr)
 				return;
 
@@ -79,7 +84,7 @@ class Lista{
 		}
 
 		void imprime(){
-			No* noAux = cabeca->prox;
+			NoD* noAux = cabeca->prox;
 
 			for(int i=0; i<tam; i++){
 				cout << noAux->val << " ";
@@ -90,24 +95,22 @@ class Lista{
 
 		void imprimeInv(){
 			
-			No* vetRef[tam];
-			No* noAux = cabeca->prox;
+			NoD* noAux = cabeca->antec;
 			
 			//cria um array de referências dos nós
-			for(int i=0; i<tam; i++){
-				vetRef[i] = noAux;
-				noAux = noAux->prox;
+			while(noAux != cabeca){
+				cout << noAux->val << " ";
+				noAux = noAux->antec;
 			}
-			for(int i=tam-1; i>=0; i--){
-				cout << vetRef[i]->val << " ";
-			}
-			cout << endl;
+			// for(int i=tam-1; i>=0; i--){
+			// }
+			// cout << endl;
 		}
 
-		No* minimo(){  // numero de acessos nos campos???
+		NoD* minimo(){  // numero de acessos nos campos???
 
-			No* noAux = cabeca->prox;
-			No* minRef = noAux;
+			NoD* noAux = cabeca->prox;
+			NoD* minRef = noAux;
 
 			while(noAux != NULL){
 				if(noAux->val < minRef->val)
