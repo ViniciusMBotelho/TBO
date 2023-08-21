@@ -1,5 +1,6 @@
 #include<iostream>
 #include<cstdlib>
+#include<vector>
 #include"Lista.hpp"
 #include"ListaDuplamente.hpp"
 
@@ -10,7 +11,8 @@ using namespace std;
 int main(){
 	
 	int tam = 10;
-	int vet[tam] = {8, 1, 3, 4, 3, 6, 10, 8, 9, 1};
+	vector<int> vet = {8, 1, 3, 4, 3, 6, 10, 8, 9, 1};
+	int acessos = 0;
 
 	// LISTA SIMPLES
 
@@ -33,9 +35,13 @@ int main(){
 
 	listaS.imprime();
 
-	cout << listaS.busca(10)->val << endl;
-	cout << listaS.busca(8)->val << endl;
-	listaS.busca(12) == NULL ? cout << "" : cout << listaS.busca(12)->val; // assim para tratar o retorno nullptr ??? 
+	cout << listaS.busca(10, acessos)->val << endl;
+	cout << acessos << " acessos necessarios" << endl;
+	cout << listaS.busca(8, acessos)->val << endl;
+	cout << acessos << " acessos necessarios" << endl;
+	//******************IMPORTANTE************** precisa concertar a saida desse proximo cout
+	listaS.busca(12, acessos) == NULL ? cout << "" : cout << listaS.busca(12, acessos)->val; // assim para tratar o retorno nullptr ??? 
+	cout << acessos << " acessos necessarios" << endl;
 
 	listaS.transposicao(3, 4);
 	listaS.transposicao(0, 6);

@@ -1,8 +1,7 @@
-#include<stdio.h>
 #include<iostream>
 #include<cstdlib>
 #include<ctime>
-#include<experimental/random>
+#include<vector>
 
 using namespace std;
 
@@ -57,10 +56,12 @@ class Lista{
 			tam = tam;
 		}
 
-		No* busca(int val){  // não entendi a parte de contar o numero de acessos a estrutura
-
+		No* busca(int val, int &acessos){  // não entendi a parte de contar o numero de acessos a estrutura
+			
+			acessos = 1;
 			No* noAux = cabeca;
 			for(int i=0; i<tam; i++){
+				acessos++;
 				noAux = noAux->prox;
 				if(noAux->val == val)
 					return noAux;
@@ -70,8 +71,10 @@ class Lista{
 		}
 
 		void transposicao(int n1, int n2){
-			No* ref1 = busca(n1);
-			No* ref2 = busca(n2);
+			
+			int acessos;
+			No* ref1 = busca(n1, acessos);
+			No* ref2 = busca(n2, acessos);
 
 			if(ref1 == nullptr || ref2 == nullptr)
 				return;
@@ -93,13 +96,14 @@ class Lista{
 
 		void imprimeInv(){
 			
-			No* vetRef[tam];
+			vector<No*> vetRef;
 			No* noAux = cabeca->prox;
 			
 			//cria um array de referências dos nós
 			for(int i=0; i<tam; i++){
-				vetRef[i] = noAux;
+				vetRef.push_back(noAux);
 				noAux = noAux->prox;
+
 			}
 			for(int i=tam-1; i>=0; i--){
 				cout << vetRef[i]->val << " ";
@@ -111,13 +115,16 @@ class Lista{
 
 			No* noAux = cabeca->prox;
 			No* minRef = noAux;
+			unsigned long acessos = 0;
 
 			while(noAux != NULL){
 				if(noAux->val < minRef->val)
 					minRef = noAux;
 
 				noAux = noAux->prox;
+				acessos++;
 			}
+			cout << acessos << " acessos para encontrar o minimo" << endl;
 			return minRef;
 		}
 };
