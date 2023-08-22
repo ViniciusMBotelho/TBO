@@ -1,13 +1,88 @@
 #include<stdio.h>
 #include<iostream>
 #include<cstdlib>
-#define TAM 3
+#include<vector>
+#define CAPACIDADE 100
 
 using namespace std;
 
-class listaEncadeada {
+class listaCon {
+	private: 
+        int USO = 0;
+        int listaC[CAPACIDADE];
+        int listaA[CAPACIDADE];
+
+    public:
+
+        void inicializa(){
+            
+            for (unsigned i = 0; i < CAPACIDADE; i++){
+                listaC[i] = -1;
+                listaA[i] = -1;
+            }
+            
+        }
+
+        void leLista(int quant, vector<int> vet){
+            
+            for (unsigned i = USO; i < quant; i++){
+                listaC[USO] = vet[i];
+                USO++;   
+            } 
+        }
+
+        void printLista(bool listaPrincipal){
+
+            if(listaPrincipal){
+                for(unsigned i=0; i<USO; i++){
+                    cout << listaC[i] << " ";
+                }
+                    cout << endl;
+            }else {
+                for(unsigned i=0; i<USO; i++){
+                    cout << listaA[i] << " ";
+                }
+                    cout << endl;
+                } 
+        }
+        
+        void printRecursivo(bool listaPrincipal){
+            
+            if(listaPrincipal)
+                printRecursivoC(USO-1);
+            else
+                printRecursivoA(USO-1);
+        }
+
+        void printRecursivoC(int AUX){
+            if(AUX<0){
+                return;
+            }
+            cout << listaC[AUX] << " ";
+            return printRecursivoC(AUX-1);
+        }
+
+        void printRecursivoA(int AUX){
+
+        }
+
+        void randomLista(){
 	
-}
+            for(unsigned i=0; i<CAPACIDADE; i++){
+                listaA[i] = rand()%1000;
+            }
+        }
+
+        void inserir(int pos, int val){
+            
+            listaC[pos] = val;
+
+            if(USO<=pos)
+                USO = pos+1;
+        }
+
+        
+};
 
 // void printLista(int lista[]){
 // 	for(unsigned i=0; i<TAM; i++){
@@ -46,8 +121,7 @@ class listaEncadeada {
 // }
 
 // void inserePosicao(int lista[], int pos){
-// 	if(pos>TAM || pos<0){
-// 		cout << "Posicao nao encontrada!!" << endl;
-// 	}
-
+//     	if(pos>TAM || pos<0){
+//     		cout << "Posicao nao encontrada!!" << endl;
+//     	}
 // }
