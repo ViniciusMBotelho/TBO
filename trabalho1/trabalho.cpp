@@ -16,49 +16,53 @@ int main(){
 
 	// LISTA SIMPLES
 
-	// cout << "LISTA LIGADA SIMPLES" << endl;
+	cout << "LISTA LIGADA SIMPLES" << endl;
 
-	// Lista listaS;
-	// Lista listaSA;
+	Lista listaS;
+	Lista listaSA;
 
-	// //inicialização
-	// listaS.iniciaLista();
-	// listaSA.iniciaLista();
+	//inicialização
+	listaS.iniciaLista();
+	listaSA.iniciaLista();
 
-	// //inserindo valores na lista principal
-	// for(int i=0; i<tam; i++){
-	// 	listaS.inserePos(i, vet[i]);
-	// }
-	// listaS.imprime();
+	//inserindo valores na lista principal
+	for(int i=0; i<tam; i++){
+		listaS.inserePos(listaS.buscaNo(i-1), vet[i]);
+	}
+	listaS.imprime();
 
-	// //inserindo valores em posições especificas
-	// listaS.inserePos(10, 11);
-	// listaS.inserePos(4, 2);
-	// listaS.inserePos(0, 7);
-	// listaS.imprime();
+	//inserindo valores em posições especificas
+	listaS.inserePos(10, 11);
+	listaS.inserePos(4, 2);
+	listaS.inserePos(0, 7);
+	listaS.imprime();
 
 
-	// //buscando valores
+	//buscando valores
 	// cout << "Encontrado valor " << listaS.busca(10, acessos)->val;
 	// cout << ", " << acessos << " acessos necessarios" << endl;
 	// cout << "Encontrado valor " << listaS.busca(8, acessos)->val;
 	// cout << ", " << acessos << " acessos necessarios" << endl;
-	//******************IMPORTANTE************** precisa concertar a saida desse proximo cout
-	// listaS.busca(12, acessos) == NULL ? cout << "" : cout << listaS.busca(12, acessos)->val; // assim para tratar o retorno nullptr ??? 
-	//cout << "Encontrado valor " << listaS.busca(12, acessos)->val;
-	//cout << ", " << acessos << " acessos necessarios" << endl;
+	// // ******************IMPORTANTE************** precisa concertar a saida desse proximo cout
+	// if(!(listaS.busca(12, acessos))){
+	// 	cout << "Valor não existe" << endl;
+	// } // assim para tratar o retorno nullptr ???
 
-	//imprime recursivo
+	// cout << "Encontrado valor " << listaS.busca(12, acessos)->val;
+	// cout << ", " << acessos << " acessos necessarios" << endl;
+
+	// imprime recursivo
 	// listaS.imprimeInv();
 
-	//transpondo posições da lista
-	// listaS.transposicao(3, 4);
-	// listaS.transposicao(0, 6);
-	// listaS.transposicao(6, 12);
-	// listaS.imprime();
+	// transpondo posições da lista
+	listaS.transposicao(listaS.buscaNo(3), listaS.buscaNo(4));
+	listaS.transposicao(listaS.buscaNo(0), listaS.buscaNo(6));
+	// listaS.transposicao(listaS.buscaNo(6), listaS.buscaNo(12));
+	cout << "transposto: ";
+	listaS.imprime();
 
-	// //buscando valor minimo na lista principal
-	// cout << listaS.minimo()->val << endl;  // Mostra posição do predecessor???
+	//buscando valor minimo na lista principal
+	cout << listaS.minimo()->val << endl;  // Mostra posição do predecessor???
 
 	// cout << endl << endl << "LISTA ENCADEADA ALEATORIA" << endl;
 	// //lista aleatoria
@@ -110,44 +114,44 @@ int main(){
 
 	// LISTA POR CONTIGUIDADE FISICA
 
-	cout << endl << "lISTA POR CONTIGUIDADE FISICA" << endl;
+	// cout << endl << "lISTA POR CONTIGUIDADE FISICA" << endl;
 
-	listaCon listaC;
-	listaCon listaA;
+	// listaCon listaC;
+	// listaCon listaA;
 
-	cout << endl << "**********Lista Principal***********" << endl;
-	//inicializações
-	listaC.inicializa();
-	listaC.leLista(tam, vet);
-	listaC.printLista();
-	//inserir novos valores
-	listaC.insere(10, 11);
-	listaC.insere(4, 2);
-	listaC.insere(0, 7);
-	listaC.printLista();
-	//busca lista principal
-	cout << listaC.busca(10) << " acessos" << endl;
-	cout << listaC.busca(8) << " acessos" << endl;
-	cout << listaC.busca(12) << " acessos" << endl;
-	//transposição lista principal
-	listaC.transposicao(3, 4);
-	listaC.transposicao(0, 6);
-	listaC.transposicao(6, 12);
-	listaC.printLista();
-	//print invertido
-	listaC.printRecursivo(true);
-	//menor valor  da lista
-	listaC.menorValor(true);
+	// cout << endl << "**********Lista Principal***********" << endl;
+	// //inicializações
+	// listaC.inicializa();
+	// listaC.leLista(tam, vet);
+	// listaC.printLista();
+	// //inserir novos valores
+	// listaC.insere(10, 11);
+	// listaC.insere(4, 2);
+	// listaC.insere(0, 7);
+	// listaC.printLista();
+	// //busca lista principal
+	// cout << listaC.busca(10) << " acessos" << endl;
+	// cout << listaC.busca(8) << " acessos" << endl;
+	// cout << listaC.busca(12) << " acessos" << endl;
+	// //transposição lista principal
+	// listaC.transposicao(3, 4);
+	// listaC.transposicao(0, 6);
+	// listaC.transposicao(6, 12);
+	// listaC.printLista();
+	// //print invertido
+	// listaC.printRecursivo(true);
+	// //menor valor  da lista
+	// listaC.menorValor(true);
 
-	//lista aleatoria
-	cout << endl << "*************Lista Aleatoria**************" << endl;
-	//inicializações
-	listaA.inicializa();
-	listaA.randomLista();
-	//mostrar lista
-	listaA.printAleatorio();
-	//mostrar lista inversa
-	listaA.printRecursivo(false);
-	//buscar menor valor
-	listaA.menorValor(false);
+	// //lista aleatoria
+	// cout << endl << "*************Lista Aleatoria**************" << endl;
+	// //inicializações
+	// listaA.inicializa();
+	// listaA.randomLista();
+	// //mostrar lista
+	// listaA.printAleatorio();
+	// //mostrar lista inversa
+	// listaA.printRecursivo(false);
+	// //buscar menor valor
+	// listaA.menorValor(false);
 }

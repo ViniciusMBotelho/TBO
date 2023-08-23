@@ -18,10 +18,11 @@ class Lista{
 		No* cabeca;
 
 	public:
+		// OK
 		bool iniciaLista(){
 
 			cabeca = new No;
-			cabeca->prox = NULL;
+			cabeca->prox = nullptr;
 			tam = 0;
 
 			if(!cabeca){
@@ -31,7 +32,8 @@ class Lista{
 			return true;
 		}
 
-		void inserePos(int pos, int val){
+		// pos precisa ser ponteiro do predecessor
+		void inserePos(No* noPred, int val){
 
 			if(pos > tam)
 				return;
@@ -50,6 +52,7 @@ class Lista{
 			tam++;
 		}
 
+		// OK
 		void aleatorio(int tam, int min, int max){
 			
 			srand(time(NULL));
@@ -61,37 +64,42 @@ class Lista{
 			tam = tam;
 		}
 
+		// TUDO CAGADO
 		No* busca(int val, int &acessos){  // não entendi a parte de contar o numero de acessos a estrutura
-			
 			acessos = 1;
 			No* noAux = cabeca->prox;
-			int i = 0;
-			while(i<tam && noAux->prox != nullptr){
-				cout << noAux->val << " ";
+
+			for(int i=0; i<tam; i++){
 				acessos++;
-				noAux = noAux->prox;
-				if(noAux->val == val)
+				if(noAux && noAux->val == val)
 					return noAux;
-				i++;
+				noAux = noAux->prox;
 			}
 			cout << "Valor " << val << " nao encontrado, ";
 			return nullptr;
 		}
 
-		void transposicao(int n1, int n2){
-			
-			int acessos;
-			No* ref1 = busca(n1, acessos);
-			No* ref2 = busca(n2, acessos);
+		// OK
+		void transposicao(No* n1, No* n2){
 
-			if(ref1 == nullptr || ref2 == nullptr)
-				return;
+			// if(ref1 == nullptr || ref2 == nullptr)
+			// 	return;
 
-			int tmp = ref1->val;
-			ref1->val = ref2->val;
-			ref2->val = tmp;
+			int tmp = n1->val;
+			n1->val = n2->val;
+			n2->val = tmp;
 		}
 
+		// OK
+		No* buscaNo(int idx){
+			No* noAux = cabeca->prox;
+			for(int i=0; i<idx; i++){
+				noAux = noAux->prox;
+			}
+			return noAux;
+		}
+
+		// OK
 		void imprime(){
 			No* noAux = cabeca->prox;
 
@@ -102,6 +110,7 @@ class Lista{
 			cout << endl;
 		}
 
+		// OK
 		void imprimeRec(No* noAux, int tamInv){
 			
 			if(tamInv == 0){
@@ -112,6 +121,7 @@ class Lista{
 			cout << noAux->val << " ";
 		}
 
+		// OK
 		void imprimeInv(){
 			
 			No* noAux = cabeca->prox;
@@ -120,6 +130,7 @@ class Lista{
 			cout << endl;
 		}
 
+		// testar
 		No* minimo(){  // numero de acessos nos campos???
 
 			No* noAux = cabeca->prox;
