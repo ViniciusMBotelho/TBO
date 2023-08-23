@@ -14,20 +14,25 @@ class No{
 class Lista{
 
 	private:
-		int tam;
+		int tam = 0;
 		No* cabeca;
 
 	public:
 		bool iniciaLista(){
+
 			cabeca = new No;
 			cabeca->prox = NULL;
 			tam = 0;
 
-			// false se n alocar (fazer) 
+			if(!cabeca){
+				return false;
+			}
+			
 			return true;
 		}
 
 		void inserePos(int pos, int val){
+
 			if(pos > tam)
 				return;
 			
@@ -59,14 +64,17 @@ class Lista{
 		No* busca(int val, int &acessos){  // não entendi a parte de contar o numero de acessos a estrutura
 			
 			acessos = 1;
-			No* noAux = cabeca;
-			for(int i=0; i<tam; i++){
+			No* noAux = cabeca->prox;
+			int i = 0;
+			while(i<tam && noAux->prox != nullptr){
+				cout << noAux->val << " ";
 				acessos++;
 				noAux = noAux->prox;
 				if(noAux->val == val)
 					return noAux;
+				i++;
 			}
-			cout << "Valor " << val << " nao encontrado" << endl;
+			cout << "Valor " << val << " nao encontrado, ";
 			return nullptr;
 		}
 
@@ -94,20 +102,21 @@ class Lista{
 			cout << endl;
 		}
 
+		void imprimeRec(No* noAux, int tamInv){
+			
+			if(tamInv == 0){
+				return ;
+			}
+
+			imprimeRec(noAux->prox, tamInv-1);
+			cout << noAux->val << " ";
+		}
+
 		void imprimeInv(){
 			
-			vector<No*> vetRef;
 			No* noAux = cabeca->prox;
-			
-			//cria um array de referências dos nós
-			for(int i=0; i<tam; i++){
-				vetRef.push_back(noAux);
-				noAux = noAux->prox;
-
-			}
-			for(int i=tam-1; i>=0; i--){
-				cout << vetRef[i]->val << " ";
-			}
+			int tamInv = tam;
+			imprimeRec(noAux, tamInv);
 			cout << endl;
 		}
 
