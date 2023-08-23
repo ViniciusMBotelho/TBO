@@ -12,6 +12,43 @@ class listaCon {
         int listaC[CAPACIDADE];
         int listaA[CAPACIDADE];
 
+        int buscaVal(int val, bool listaPrincipal){
+
+            if(listaPrincipal){
+                for (unsigned i = 0; i < USO; i++){
+                    if(listaC[i]==val){
+                        return i;
+                    }
+                }
+                return -1;   
+            }else {
+                for (unsigned i = 0; i < USO; i++){
+                    if(listaA[i]==val){
+                        return i;
+                    }
+                } 
+                return -1;
+            }
+        }
+
+        void printRecursivoC(int AUX){
+            
+            if(AUX<0){
+                return;
+            }
+            cout << listaC[AUX] << " ";
+            return printRecursivoC(AUX-1);
+        }
+
+        void printRecursivoA(int AUX){
+
+             if(AUX<0){
+                return;
+            }
+            cout << listaA[AUX] << " ";
+            return printRecursivoA(AUX-1);
+        }
+
     public:
 
         void inicializa(){
@@ -48,22 +85,14 @@ class listaCon {
         
         void printRecursivo(bool listaPrincipal){
             
-            if(listaPrincipal)
+            if(listaPrincipal){
                 printRecursivoC(USO-1);
-            else
-                printRecursivoA(USO-1);
-        }
-
-        void printRecursivoC(int AUX){
-            if(AUX<0){
-                return;
+                cout << endl;
             }
-            cout << listaC[AUX] << " ";
-            return printRecursivoC(AUX-1);
-        }
-
-        void printRecursivoA(int AUX){
-
+            else{
+                printRecursivoA(USO-1);
+                cout << endl;
+            }
         }
 
         void randomLista(){
@@ -81,47 +110,68 @@ class listaCon {
                 USO = pos+1;
         }
 
-        
+        int busca(bool listaPrincipal, int val){
+            
+            int acessos = 0;
+            if(listaPrincipal){
+                if(buscaVal(val, true)!=-1){
+                    cout << "Posicao " << buscaVal(val, true) << " no vetor" << endl;
+                    return buscaVal(val, true);
+                }
+                else{
+                    cout << "Nao encontrado!" << endl;
+                    return USO;
+                }
+
+
+            }else {
+                if(buscaVal(val, false)!=-1){
+                    cout << "Posicao " << buscaVal(val, false) << " no vetor" << endl;
+                    return buscaVal(val, false);
+                }
+                else{
+                    cout << "Nao encontrado!" << endl;
+                    return USO;
+                }
+            }    
+        }
+
+        void transposicao(int pos1, int pos2){
+            
+            if(pos1>USO || pos2>USO){
+                cout << "Uma das posicoes nao foi preenchida!" << endl;
+                return;
+            }
+            else{
+                int aux;
+                aux = listaC[pos1];
+                listaC[pos1] = listaC[pos2];
+                listaC[pos2] = aux;
+                return;
+            }
+        }
+
+        void menorValor(bool listaPrincipal){
+
+            int menor;
+            if(listaPrincipal){
+                menor = listaC[0];
+                for(unsigned i = 0; i < USO; i++){
+                    if(listaC[i] < menor)
+                        menor = listaC[i];
+                }
+                cout << "O menor valor da lista e: " << menor << endl;
+                cout << USO << " acessos" << endl;
+                return;
+            }else{
+                menor = listaA[0];
+                for(unsigned i = 0; i < USO; i++){
+                    if(listaA[i] < menor)
+                        menor = listaA[i];
+                }
+                cout << "O menor valor da lista e: " << menor << endl;
+                cout << USO << " acessos" << endl;
+                return;
+            }  
+        }
 };
-
-// void printLista(int lista[]){
-// 	for(unsigned i=0; i<TAM; i++){
-// 		cout << lista[i] << " ";
-// 	}
-// 		cout << endl;
-// }
-
-// // testando colaborador git
-
-// int* randomLista(int lista[]){
-	
-// 	for(unsigned i=0; i<TAM; i++){
-// 		lista[i] = rand()%100;
-// 	}
-	
-// 	return lista;
-// }
-
-
-// int* lerLista(int lista[], int quant){
-	
-// 	for(unsigned i=0; i<quant; i++){
-// 		cin >> lista[i];
-// 	}
-
-// }
-
-// int buscaValor(int lista[], int val){
-	
-// 	for(unsigned i=0; i<TAM; i++){
-// 		if(val == lista[i])
-// 			return i;
-// 	}
-// 	cout << "Valor nao encontrado" << endl;
-// }
-
-// void inserePosicao(int lista[], int pos){
-//     	if(pos>TAM || pos<0){
-//     		cout << "Posicao nao encontrada!!" << endl;
-//     	}
-// }

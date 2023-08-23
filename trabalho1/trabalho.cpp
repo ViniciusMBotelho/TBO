@@ -105,16 +105,36 @@ int main(){
 
 	listaCon listaE;
 
+	//inicializações
 	listaE.inicializa();
 	listaE.leLista(tam, vet);
 	listaE.printLista(true);
 
+	//lista principal
 	listaE.inserir(10, 11);
 	listaE.inserir(4, 2);
 	listaE.inserir(0, 7);
 	listaE.printLista(true);
-
 	listaE.printRecursivo(true);
-	
+
+	//lista aleatoria
 	listaE.randomLista();
+	listaE.printLista(false);
+	listaE.printRecursivo(false);
+
+	//busca lista principal
+	cout << listaE.busca(true,10) << " acessos" << endl;
+	cout << listaE.busca(true,8) << " acessos" << endl;
+	cout << listaE.busca(true,12) << " acessos" << endl;
+	listaE.printLista(true);
+
+	//transposição lista principal
+	listaE.transposicao(3, 4);
+	listaE.transposicao(0, 6);
+	listaE.transposicao(6, 12);
+	listaE.printLista(true);
+
+	//menor valor  da lista
+	listaE.menorValor(true);
+	listaE.menorValor(false);
 }
