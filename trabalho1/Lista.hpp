@@ -56,26 +56,25 @@ class Lista{
 			tam = tam;
 		}
 
-		// TUDO CAGADO
-		No* busca(int val, int &acessos){  // não entendi a parte de contar o numero de acessos a estrutura
-			acessos = 1;
-			No* noAux = cabeca->prox;
+		// OK
+		No* busca(int val){
+			int acessos = 0;
+			No* noLista = cabeca->prox;
 
-			for(int i=0; i<tam; i++){
+			while(noLista != nullptr){
+				if(noLista->val == val){
+					cout << "Acessos necessarios: " << acessos << ", valor " << val << " encontrado" << "na posicao " << acessos << endl;
+					return noLista;
+				}
 				acessos++;
-				if(noAux && noAux->val == val)
-					return noAux;
-				noAux = noAux->prox;
+				noLista = noLista->prox; 
 			}
-			cout << "Valor " << val << " nao encontrado, ";
+			cout << "Valor " << val << " nao encontrado!" << endl;
 			return nullptr;
 		}
 
 		// OK
 		void transposicao(No* n1, No* n2){
-
-			// if(ref1 == nullptr || ref2 == nullptr)
-			// 	return;
 
 			int tmp = n1->prox->val;
 			n1->prox->val = n2->prox->val;
@@ -110,13 +109,13 @@ class Lista{
 		}
 
 		// OK
-		void imprimeRec(No* noAux, int tamInv){
+		void imprimeRec(No* noAux){
 			
-			if(tamInv == 0){
+			if(noAux == nullptr){
 				return ;
 			}
 
-			imprimeRec(noAux->prox, tamInv-1);
+			imprimeRec(noAux->prox);
 			cout << noAux->val << " ";
 		}
 
@@ -124,26 +123,25 @@ class Lista{
 		void imprimeInv(){
 			
 			No* noAux = cabeca->prox;
-			int tamInv = tam;
-			imprimeRec(noAux, tamInv);
+			imprimeRec(noAux);
 			cout << endl;
 		}
 
-		// testar
-		No* minimo(){  // numero de acessos nos campos???
-
+		// OK
+		int minimo(int &acessos, int &indice){
+			
 			No* noAux = cabeca->prox;
-			No* minRef = noAux;
-			unsigned long acessos = 0;
-
+			int min = noAux->val;
+			acessos = 0;
+			
 			while(noAux != NULL){
-				if(noAux->val < minRef->val)
-					minRef = noAux;
-
-				noAux = noAux->prox;
 				acessos++;
+				if(noAux->val < min){
+					min = noAux->val;
+					indice = acessos-1;
+				}
+				noAux = noAux->prox;
 			}
-			cout << acessos << " acessos para encontrar o minimo" << endl;
-			return minRef;
+			return min;
 		}
 };

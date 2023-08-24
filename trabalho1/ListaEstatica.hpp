@@ -8,7 +8,7 @@ using namespace std;
 
 class listaCon {
 	private: 
-        int USO = 0;
+        unsigned USO = 0;
         int lista[CAPACIDADE];
 
         int buscaVal(int val){
@@ -40,7 +40,7 @@ class listaCon {
             } 
         }
 
-        void leLista(int quant, vector<int> vet){
+        void leLista(unsigned quant, vector<int> vet){
             
             for (unsigned i = USO; i < quant; i++){
                 lista[USO] = vet[i];
@@ -102,8 +102,6 @@ class listaCon {
         }
 
         int busca(int val){
-            
-            int acessos = 0;
                 if(buscaVal(val)!=-1){
                     cout << "Posicao " << buscaVal(val) << " no vetor" << endl;
                     return buscaVal(val);
@@ -114,7 +112,7 @@ class listaCon {
                 } 
         }
 
-        void transposicao(int pos1, int pos2){
+        void transposicao(unsigned pos1, unsigned pos2){
             
             if(pos1>USO || pos2>USO){
                 cout << "Uma das posicoes nao foi preenchida!" << endl;
