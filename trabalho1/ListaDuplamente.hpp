@@ -18,73 +18,96 @@ class ListaD{
 		int tam;
 		NoD* cabeca;
 
+		//OK
+		void imprimeRec(NoD* noAux){
+			
+			if(noAux == cabeca){
+				return ;
+			}
+
+			imprimeRec(noAux->prox);
+			cout << noAux->val << " ";
+		}
+
 	public:
+
+		//OK
 		bool iniciaLista(){
+
 			cabeca = new NoD;
 			cabeca->prox = cabeca;
 			cabeca->antec = cabeca;
-
 			tam = 0;
 
-			// false se n alocar (fazer) 
+			if(!cabeca){
+				return false;
+			}
+			
 			return true;
 		}
+		//OK
+		 void inserePos(NoD* noPred, int val){
 
-		void inserePos(int pos, int val){
-			if(pos > tam)
-				return;
-			
-			NoD* noAux = cabeca;
-			NoD* novoNo = new NoD;
-			novoNo->val = val;
-			int i;
+            NoD* novoNo = new NoD;
+            novoNo->val = val;
 
-			for(i=0; i<pos; i++){  // para 1 NoD antes
-				noAux = noAux->prox;
-			}
-			novoNo->prox = noAux->prox;
-            novoNo->antec = noAux;
-			noAux->prox = novoNo;
-            novoNo->prox->antec = novoNo;
+            novoNo->prox = noPred->prox;
+            novoNo->antec = noPred;
+            noPred->prox = novoNo;
+            noPred->antec = novoNo;
 
-			tam++;
-		}
-
+            tam++;
+        } 
+		//OK
 		void aleatorio(int tam, int min, int max){
 			
 			srand(time(NULL));
 			int num;
 			for(int i=0; i<tam; i++){
 				num = rand() % (max-min + 1) + min;
-				inserePos(i, num);
+				inserePos(buscaNoPred(i), num);
 			}
 			tam = tam;
 		}
+		//OK
+		NoD* busca(int val){
+			int acessos = 0;
+			NoD* noLista = cabeca->prox;
 
-		NoD* busca(int val){  // não entendi a parte de contar o numero de acessos a estrutura
-
-			NoD* noAux = cabeca;
-			for(int i=0; i<tam; i++){
-				noAux = noAux->prox;
-				if(noAux->val == val)
-					return noAux;
+			while(noLista != cabeca){
+				if(noLista->val == val){
+					cout << "Acessos necessarios: " << acessos << ", valor " << val << " encontrado" << "na posicao " << acessos << endl;
+					return noLista;
+				}
+				acessos++;
+				noLista = noLista->prox; 
 			}
-			cout << "Valor " << val << " nao encontrado" << endl;
+			cout << "Valor " << val << " nao encontrado!" << endl;
 			return nullptr;
 		}
+		//OK
+		NoD* buscaNoPred(int idx){
 
-		void transposicao(int n1, int n2){
-			NoD* ref1 = busca(n1);
-			NoD* ref2 = busca(n2);
+			NoD* aux = cabeca->prox;
+			if(idx == 0){
+				return cabeca;
+			}
 
-			if(ref1 == nullptr || ref2 == nullptr)
-				return;
-
-			int tmp = ref1->val;
-			ref1->val = ref2->val;
-			ref2->val = tmp;
+			int i=0;
+			while(aux != NULL && i < idx-1){
+				aux = aux->prox;
+				i++;
+			}
+			return aux;
 		}
+		//OK
+		void transposicao(NoD* n1, NoD* n2){
 
+			int tmp = n1->prox->val;
+			n1->prox->val = n2->prox->val;
+			n2->prox->val = tmp;
+		}
+		//OK
 		void imprime(){
 			NoD* noAux = cabeca->prox;
 
@@ -94,28 +117,28 @@ class ListaD{
 			}
 			cout << endl;
 		}
-
+		// OK
 		void imprimeInv(){
 			
-			NoD* noAux = cabeca->antec;
+			NoD* noAux = cabeca->prox;
+			imprimeRec(noAux);
+			cout << endl;
+		}
+		//OK
+		int minimo(int &acessos, int &indice){
+			
+			NoD* noAux = cabeca->prox;
+			int min = noAux->val;
+			acessos = 0;
 			
 			while(noAux != cabeca){
-				cout << noAux->val << " ";
-				noAux = noAux->antec;
-			}
-		}
-
-		NoD* minimo(){  // numero de acessos nos campos???
-
-			NoD* noAux = cabeca->prox;
-			NoD* minRef = noAux;
-
-			while(noAux != cabeca){
-				if(noAux->val < minRef->val)
-					minRef = noAux;
-
+				acessos++;
+				if(noAux->val < min){
+					min = noAux->val;
+					indice = acessos-1;
+				}
 				noAux = noAux->prox;
 			}
-			return minRef;
+			return min;
 		}
 };

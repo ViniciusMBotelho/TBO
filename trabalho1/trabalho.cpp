@@ -31,7 +31,7 @@ int main(){
 	// }
 	// listaS.imprime();
 
-	// //inserindo valores em posições especificas
+	//inserindo valores em posições especificas
 	// listaS.inserePos(listaS.buscaNoPred(10), 11);
 	// listaS.inserePos(listaS.buscaNoPred(4), 2);
 	// listaS.inserePos(listaS.buscaNoPred(0), 7);
@@ -71,37 +71,44 @@ int main(){
 	ListaD listaD;
 	ListaD listaDA;
 
+	//inicialização das listas
 	listaD.iniciaLista();
 	listaDA.iniciaLista();
 
+	//inserindo valores principais da lista
 	for(int i=0; i<tam; i++){
-		listaD.inserePos(i, vet[i]);
+		listaD.inserePos(listaD.buscaNoPred(i), vet[i]);
 	}
 	listaD.imprime();
 
-	listaD.inserePos(10, 11);
-	listaD.inserePos(4, 2);
-	listaD.inserePos(0, 7);
+	//inserindo valores em pontos especificos
+	listaD.inserePos(listaD.buscaNoPred(10), 11);
+	listaD.inserePos(listaD.buscaNoPred(4), 2);
+	listaD.inserePos(listaD.buscaNoPred(0), 7);
 	listaD.imprime();
 
-	cout << listaD.busca(10)->val << endl;
-	cout << listaD.busca(8)->val << endl;
-	listaD.busca(12) == nullptr ? cout << "" : cout << listaD.busca(12)->val;  // assim para tratar o retorno nullptr ??? 
+	//buscando valores e retornando o ponteiro referente a sua posicao
+	(listaD.busca(10));
+	(listaD.busca(8));
+	(listaD.busca(12));
 
-	listaD.transposicao(3, 4);
-	listaD.transposicao(0, 6);
-	listaD.transposicao(6, 12);
+	//transpondo valores da lista
+	listaD.transposicao(listaD.buscaNoPred(3), listaD.buscaNoPred(4));
+	listaD.transposicao(listaD.buscaNoPred(0), listaD.buscaNoPred(6));
+	listaD.transposicao(listaD.buscaNoPred(6), listaD.buscaNoPred(12));
 	listaD.imprime();
 
-	cout << listaD.minimo()->val << endl;  // Mostra posição do predecessor???
+	//imprimindo lista inversa
 	listaD.imprimeInv();
+	//menor valor da lista
+	cout << "O menor valor é: " << listaD.minimo(acessos, indice) << ", posicao " << indice << ", formam necessarios " << acessos << " acessos" << endl;
 
 	cout << endl << endl << "LISTA DUPLAMENTE ENCADEADA ALEATORIA" << endl;
 
 	listaDA.aleatorio(100, 1, 1000);
 	listaDA.imprime();
-	cout << listaDA.minimo()->val << endl;
 	listaDA.imprimeInv();
+	cout << "O menor valor é: " << listaDA.minimo(acessos, indice) << ", posicao " << indice << ", formam necessarios " << acessos << " acessos" << endl;
 
 
 	// LISTA POR CONTIGUIDADE FISICA
