@@ -21,20 +21,19 @@ int main(){
 	Lista listaS;
 	Lista listaSA;
 
-	//inicialização
+	//INICIALIZAÇÃO
 	listaS.iniciaLista();
 	listaSA.iniciaLista();
 
-	//inserindo valores na lista principal
 	for(int i=0; i<tam; i++){
-		listaS.inserePos(listaS.buscaNo(i-1), vet[i]);
+		listaS.inserePos(listaS.buscaNoPred(i), vet[i]);
 	}
 	listaS.imprime();
 
 	//inserindo valores em posições especificas
-	listaS.inserePos(10, 11);
-	listaS.inserePos(4, 2);
-	listaS.inserePos(0, 7);
+	listaS.inserePos(listaS.buscaNoPred(10), 11);
+	listaS.inserePos(listaS.buscaNoPred(4), 2);
+	listaS.inserePos(listaS.buscaNoPred(0), 7);
 	listaS.imprime();
 
 
@@ -55,9 +54,9 @@ int main(){
 	// listaS.imprimeInv();
 
 	// transpondo posições da lista
-	listaS.transposicao(listaS.buscaNo(3), listaS.buscaNo(4));
-	listaS.transposicao(listaS.buscaNo(0), listaS.buscaNo(6));
-	// listaS.transposicao(listaS.buscaNo(6), listaS.buscaNo(12));
+	listaS.transposicao(listaS.buscaNoPred(3), listaS.buscaNoPred(4));
+	listaS.transposicao(listaS.buscaNoPred(0), listaS.buscaNoPred(6));
+	listaS.transposicao(listaS.buscaNoPred(6), listaS.buscaNoPred(12));
 	cout << "transposto: ";
 	listaS.imprime();
 

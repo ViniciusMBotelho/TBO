@@ -32,22 +32,14 @@ class Lista{
 			return true;
 		}
 
-		// pos precisa ser ponteiro do predecessor
+		// OK
 		void inserePos(No* noPred, int val){
 
-			if(pos > tam)
-				return;
-			
-			No* noAux = cabeca;
 			No* novoNo = new No;
 			novoNo->val = val;
-			int i;
 
-			for(i=0; i<pos; i++){  // para 1 no antes
-				noAux = noAux->prox;
-			}
-			novoNo->prox = noAux->prox;
-			noAux->prox = novoNo;
+			novoNo->prox = noPred->prox;  //seg fault aqui
+			noPred->prox = novoNo;
 
 			tam++;
 		}
@@ -59,7 +51,7 @@ class Lista{
 			int num;
 			for(int i=0; i<tam; i++){
 				num = rand() % (max-min + 1) + min;
-				inserePos(i, num);
+				inserePos(buscaNoPred(i), num);
 			}
 			tam = tam;
 		}
@@ -85,18 +77,25 @@ class Lista{
 			// if(ref1 == nullptr || ref2 == nullptr)
 			// 	return;
 
-			int tmp = n1->val;
-			n1->val = n2->val;
-			n2->val = tmp;
+			int tmp = n1->prox->val;
+			n1->prox->val = n2->prox->val;
+			n2->prox->val = tmp;
 		}
 
 		// OK
-		No* buscaNo(int idx){
-			No* noAux = cabeca->prox;
-			for(int i=0; i<idx; i++){
-				noAux = noAux->prox;
+		No* buscaNoPred(int idx){
+
+			No* aux = cabeca->prox;
+			if(idx == 0){
+				return cabeca;
 			}
-			return noAux;
+
+			int i=0;
+			while(aux != NULL && i < idx-1){
+				aux = aux->prox;
+				i++;
+			}
+			return aux;
 		}
 
 		// OK
