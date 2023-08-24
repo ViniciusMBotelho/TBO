@@ -103,6 +103,7 @@ class listaCon {
 
         int busca(int val){
                 if(buscaVal(val)!=-1){
+                    cout << "Valor " << val << " encontrado\n";
                     cout << "Posicao " << buscaVal(val) << " no vetor" << endl;
                     return buscaVal(val);
                 }

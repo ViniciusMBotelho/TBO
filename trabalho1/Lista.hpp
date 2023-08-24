@@ -63,7 +63,9 @@ class Lista{
 
 			while(noLista != nullptr){
 				if(noLista->val == val){
-					cout << "Acessos necessarios: " << acessos << ", valor " << val << " encontrado" << "na posicao " << acessos << endl;
+					cout << "Valor: " << val << " encontrado\n";
+					cout << "Posicao: "<< acessos << " no vetor\n";
+					cout << "Acessos: " << acessos+1 << endl;
 					return noLista;
 				}
 				acessos++;
