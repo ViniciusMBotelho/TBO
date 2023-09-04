@@ -1,72 +1,71 @@
 #include<iostream>
 #include<stdlib.h>
+#include<vector>
+#include<time.h>
 
 using namespace std;
 
 #define TAMALE 100
 #define TAM 20
 
-void imprime(int* vet, int tam);
-void selectionSort(int *vet, int tam, bool aleatorio);
+void imprime(vector<int> vec);
+void selectionSort(vector<int> vec, int tam, bool aleatorio);
 void criaAleatoria();
 
 int main() {
-    
+    // srand(time(NULL));  //descometar isso
 
-    int vet[TAM] = {70, 5, 12, 8, 99, 72, 1, 15, 20, 91, 14, 61, 66, 41, 81, 88, 16, 21, 34, 90};
-    // int vetAle[TAMALE];
+    // lista unica
+    vector<int> vec = {70, 5, 12, 8, 99, 72, 1, 15, 20, 91, 14, 61, 66, 41, 81, 88, 16, 21, 34, 90};
 
-    // imprime(vet, TAM);
-    // selectionSort(vet, TAM, false);
+    imprime(vec);
+    selectionSort(vec, TAM, false);
 
     //lista aleatoria
     criaAleatoria();
 
 }
 
-void imprime(int* vet, int tam){
-  for(int i=0; i<tam; i++)
-      cout << vet[i] << " ";
+void imprime(vector<int> vec){
+  for(int i=0; i<vec.size(); i++)
+      cout << vec[i] << " ";
     cout << endl;
 }
 
-void selectionSort(int *vet, int tam, bool aleatorio){
+void selectionSort(vector<int> vec, int tam, bool aleatorio){
 
     int cont = 0;
     int idx = 0;
     for(int i=0; i<tam; i++){
         idx = i;
         for(int j=i+1; j<tam; j++){
-            if(vet[idx] > vet[j])
+            if(vec[idx] > vec[j])
                 idx = j;   
         }
-        if(!aleatorio){
-            cout << "iteracoes: " << cont << "  |  ";
-            imprime(vet, tam);
-        }
-            cont += tam-i;
-            int aux = vet[i];
-            vet[i] = vet[idx];
-            vet[idx] = aux;
+        // swap
+        int aux = vec[i];
+        vec[i] = vec[idx];
+        vec[idx] = aux;
+        
+        cont += (tam-i-1);  // acessos
+        if(!aleatorio)
+            imprime(vec);  // imprime repetidamente
     }
-    if(aleatorio){
-        cout << "iteracoes: " << cont << "  |  ";
-        imprime(vet, tam);
-    }
-    cont = 0;
+    if(aleatorio)  // imprime uma só vez
+        imprime(vec);
+    printf("Comparacoes %d\n", cont);
 }
 
 void criaAleatoria(){
+    
+    vector<int> vAle;
 
-    int vet[TAMALE];
-    int uso = 1;
-
-    for(int i=0; i<10; i++){
-        for(int j=0; j<uso; j++){
-            vet[j] = (rand() % 20) + 1;
+    for(int i=1; i<=10; i++){
+        for(int j=1; j<=i; j++){
+            vAle.push_back((rand() % 20) + 1);
         }
-        imprime(vet, uso);
-        selectionSort(vet, uso, true);
-        uso++;
+        imprime(vAle);
+        selectionSort(vAle, vAle.size(), true);
+        vAle.clear();
     }
 }
