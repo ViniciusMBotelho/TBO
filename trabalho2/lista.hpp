@@ -1,0 +1,4 @@
+class Lista{
+    private:
+        
+}
