@@ -68,7 +68,7 @@ void criaAleatoria(bool opcao){
     vector<int> vAle;
     if(opcao==true){
 
-        for(int i=1; i<=10; i++){
+        for(int i=1; i<=100; i++){
             for(int j=1; j<=i; j++){
                 vAle.push_back((rand() % 20) + 1);
             }
@@ -78,7 +78,7 @@ void criaAleatoria(bool opcao){
         }
     }else{
 
-        for(int i=1; i<=10; i++){
+        for(int i=1; i<=100; i++){
             for(int j=1; j<=i; j++){
                 vAle.push_back((rand() % 20) + 1);
             }
