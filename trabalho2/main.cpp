@@ -9,13 +9,10 @@ using namespace std;
 #define TAMALE 100
 #define TAM 20
 
-void imprime(vector<int> vec);
-void selectionSort(vector<int> vec, int tam, bool aleatorio);
-void criaAleatoria(bool opcao);
-
 int main() {
     // srand(time(NULL));  //descometar isso
     vector<int> vec = {70, 1, 12, 8, 99, 72, 5, 15, 20, 91, 14, 61, 66, 41, 81, 88, 16, 21, 34, 90};
+    vector<double> vetorTeste(TAMALE);
 
     //**********************************************SELECTION SORT***********************************************************
     cout << endl << "************************SELECTION SORT************************" << endl << endl;
@@ -26,7 +23,8 @@ int main() {
 
     //lista aleatoria
     cout << endl << ">> LISTA ALEATORIA" << endl;
-    criaAleatoria(true);
+    vetorTeste = criaAleatoria(true);
+    criaPNG(vetorTeste, true);
 
     //**********************************************INSERTION SORT***********************************************************
     cout << endl << "************************INSERTION SORT************************" << endl << endl;
@@ -37,6 +35,7 @@ int main() {
 
     //lista aleatoria
    cout << endl << ">> LISTA ALEATORIA" << endl;
-   criaAleatoria(false);
+   vetorTeste = criaAleatoria(false);
+   criaPNG(vetorTeste, false);
    
 }

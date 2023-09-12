@@ -1,5 +1,8 @@
 #include<iostream>
 #include<vector>
+#include"./plPlot_Includes/pbPlots.hpp"
+#include"./plPlot_Includes/supportLib.hpp"
+
 using namespace std;
 
 //*************************************************IMPRIMET**************************************************************
@@ -12,9 +15,9 @@ void imprime(vector<int> vec){
 
 //**********************************************INSERTION SORT***********************************************************
 
-void insertionSort(vector<int> vec, int tam, bool aleatorio){
+double insertionSort(vector<int> vec, int tam, bool aleatorio){
     
-    int comp = 0;
+    double comp = 0;
     int i, valor, j;
     for (i = 1; i < tam; i++) {
         valor = vec[i];
@@ -33,13 +36,14 @@ void insertionSort(vector<int> vec, int tam, bool aleatorio){
     if(aleatorio)  // imprime uma só vez
         imprime(vec);
     cout << "Comparações: " << comp << endl << "--------------------------------------------------------------" << endl;
+    return comp;
 }
 
 //**********************************************SELECTION SORT***********************************************************
 
-void selectionSort(vector<int> vec, int tam, bool aleatorio){
+double selectionSort(vector<int> vec, int tam, bool aleatorio){
 
-    int comp = 0;
+    double comp = 0;
     int idx = 0;
     for(int i=0; i<tam; i++){
         idx = i;
@@ -59,13 +63,18 @@ void selectionSort(vector<int> vec, int tam, bool aleatorio){
     if(aleatorio)  // imprime uma só vez
         imprime(vec);
     cout << "Comparações: " << comp << endl << "--------------------------------------------------------------" << endl;
+    return comp;
 }
 
 //**********************************************GERA ALEATORIA***********************************************************
 
-void criaAleatoria(bool opcao){
+
+vector<double> criaAleatoria(bool opcao){
     
+    vector<double> vetorteste(100);
     vector<int> vAle;
+    int k=0;
+
     if(opcao==true){
 
         for(int i=1; i<=100; i++){
@@ -73,7 +82,7 @@ void criaAleatoria(bool opcao){
                 vAle.push_back((rand() % 20) + 1);
             }
             imprime(vAle);
-            selectionSort(vAle, vAle.size(), true);
+            vetorteste[k++] = selectionSort(vAle, vAle.size(), true);
             vAle.clear();
         }
     }else{
@@ -83,8 +92,41 @@ void criaAleatoria(bool opcao){
                 vAle.push_back((rand() % 20) + 1);
             }
             imprime(vAle);
-            insertionSort(vAle, vAle.size(), true);
+            vetorteste[k++] = insertionSort(vAle, vAle.size(), true);
             vAle.clear();
         }
     }
+    return vetorteste;
+}
+
+int criaPNG(vector<double> vetorteste, bool opcao){
+    bool success;
+    vector<double> vetor100(100);
+
+    // Preencher o vetor com valores de 1 a 99
+    for (int i = 0; i < 100; i++) {
+        vetor100[i] = i + 1;
+    }
+
+    StringReference *errorMessage = new StringReference();
+	RGBABitmapImageReference *imageReference = CreateRGBABitmapImageReference();
+
+	success = DrawScatterPlot(imageReference, 1500, 1200, &vetor100, &vetorteste, errorMessage);
+
+    if(success){
+        vector<double> *pngdata = ConvertToPNG(imageReference->image);
+        if(opcao == true) 
+            WriteToFile(pngdata, "./images/insertion.png");
+        else
+            WriteToFile(pngdata, "./images/selection.png");
+        DeleteImage(imageReference->image);
+	}else{
+	    cerr << "Error: ";
+        for(wchar_t c : *errorMessage->string){
+            wcerr << c;
+        }
+        cerr << endl;
+	}
+
+	return success ? 0 : 1;
 }
