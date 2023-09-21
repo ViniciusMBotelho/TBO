@@ -10,7 +10,7 @@
 
 using namespace std;
 
-string removeSpaces(string str){
+string removeSpace(string str){  // apaga o primeiro caracter (espaço em branco)
     str.erase(0, 1);
     return str;
 }
@@ -20,48 +20,41 @@ int main(){
     cinemasArq.open("dados/cinemas.txt");
 
     vector<Cinema> cinemas;
-    Cinema cinema;
-
     string linha;
     string seg;
     vector<string> seglist;
-    getline(cinemasArq, linha);
-
-    int idxCol = 0;
+    getline(cinemasArq, linha);  // ignora a primeira linha do txt
+    int idxCol = 0;  // indice para qual variável seg será direcioanado
+    
+    // Realiza a leitura de cinemas e extrais suas variáveis
     while(getline(cinemasArq, linha)){
         stringstream teste(linha);
+        Cinema cinema;
         while(getline(teste, seg, ',')){
-            seg = removeSpaces(seg);
-            switch (idxCol){
+            switch (idxCol){  // seta cada sub string em sua variável no objeto cinema
             case 0:
                 cinema.setCinema_id(seg);
                 break;
             case 1:
-                cinema.setNome(seg);
-                cout << (seg);
+                cinema.setNome(removeSpace(seg));
                 break;
             case 2:
-                cinema.setCord_x(stoi(seg));
+                cinema.setCord_x(stoi(removeSpace(seg)));
                 break;
             case 3:
-                cinema.setCord_y(stoi(seg));
+                cinema.setCord_y(stoi(removeSpace(seg)));
                 break;
             case 4:
-                // cinema.setPreco(stof(seg));
+                cinema.setPreco(stof(removeSpace(seg)));
                 break;
             default:
-                if((seg)[0] == 'c'){
-                    idxCol = -1;
-                    break;
-                }
-                else
-                    cinema.setFilmes_exibicao(seg);
+                cinema.setFilmes_exibicao(removeSpace(seg));
+                break;
             }
             idxCol++;
-            // seglist.push_back(removeSpaces(seg));
         }
-        cinemas.push_back(cinema);
-        // cout << cinema.getCinema_id();
-        // cout << "!!!";
-    }    
+        idxCol = 0;
+        cinemas.push_back(cinema);  // adiciona o filme no vetor
+    }
+    
 }

@@ -15,6 +15,9 @@ class Cinema{
 
     public:
 
+        void limpaFilmes(){
+            filmes_exibicao.clear();
+        }
 
         string getCinema_id()
         {
