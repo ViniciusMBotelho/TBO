@@ -56,5 +56,11 @@ int main(){
         idxCol = 0;
         cinemas.push_back(cinema);  // adiciona o filme no vetor
     }
-    
+
+    for(int i=0; i<cinemas.size(); i++){  // imprime todos filmes exibidos pelos cinemas
+        for(int j=0; j<cinemas[i].getFilmes_exibicao().size(); j++){
+            cout << cinemas[i].getFilmes_exibicao()[j] << " ";
+        }
+        cout << endl;
+    }
 }
