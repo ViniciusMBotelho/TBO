@@ -6,7 +6,7 @@
 #include<string>
 #include <iostream>
 #include <algorithm>
-#include "Cinemas.hpp"
+#include "Cinema.hpp"
 
 using namespace std;
 
