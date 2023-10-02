@@ -15,7 +15,7 @@ int main(){
     auto start = chrono::high_resolution_clock::now();
 
     ifstream cinemasArq;
-    cinemasArq.open("dados/teste.txt");
+    cinemasArq.open("dados/filmesCrop.txt");
 
     if(!cinemasArq.is_open()){
         std::cout << "NAO ABERTO" << endl;
@@ -88,18 +88,14 @@ int main(){
                 filme.setGenres(genero);
             }
         }
-
-        // std::cout << filme.getTconst() << " " << filme.getTitleType() << " " << filme.getPrimaryTitle() << " "<<filme.getOriginalTitle()<<" "<<filme.getIsAdult()<<" "<<filme.getStartYear()<<" "<<filme.getEndYear()<<" "<<filme.getRuntimeMinutes() <<endl;
         ssLinha.clear();
 
         filmes.push_back(filme);
         i++;
-
-        cout << filme.getTconst();
     }
 
-    for(string genero: filmes[206688].getGenres()){
-        // cout << genero << " ";
+    for(string genero: filmes[584119].getGenres()){
+        cout << genero << " ";
     }
 
     cinemasArq.close();
