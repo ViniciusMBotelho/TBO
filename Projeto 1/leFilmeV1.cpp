@@ -4,6 +4,7 @@
 #include<fstream>
 #include<sstream>
 #include<chrono>
+#include <algorithm>
 #include "Filme.hpp"
 
 using namespace std;
@@ -34,11 +35,9 @@ int main(){
     
     int i=0;
 
-    while(getline(cinemasArq, linha) && i<=10){
+    while(getline(cinemasArq, linha)){
         Filme filme;
-        // stringstream ssLinha(linha);
         ssLinha.str(linha);
-        
         
         getline(ssLinha, coluna, '\t'); //tconst
         filme.setTconst(coluna);
@@ -77,15 +76,30 @@ int main(){
             filme.setRuntimeMinutes(-1);
 
         getline(ssLinha, coluna);  //genres
+        stringstream ssAux;
+        string genero;
+        ssAux.str(coluna);
 
-        filme.setGenres(coluna);
+        if(coluna.find(',') == string::npos){
+            filme.setGenres(coluna);
+        }
+        else{
+            while(getline(ssAux, genero, ',')){
+                filme.setGenres(genero);
+            }
+        }
 
-        std::cout << filme.getTconst() << " " << filme.getTitleType() << " " << filme.getPrimaryTitle() << " "<<filme.getOriginalTitle()<<" "<<filme.getIsAdult()<<" "<<filme.getStartYear()<<" "<<filme.getEndYear()<<" "<<filme.getRuntimeMinutes() <<endl;
-
+        // std::cout << filme.getTconst() << " " << filme.getTitleType() << " " << filme.getPrimaryTitle() << " "<<filme.getOriginalTitle()<<" "<<filme.getIsAdult()<<" "<<filme.getStartYear()<<" "<<filme.getEndYear()<<" "<<filme.getRuntimeMinutes() <<endl;
         ssLinha.clear();
 
         filmes.push_back(filme);
         i++;
+
+        cout << filme.getTconst();
+    }
+
+    for(string genero: filmes[206688].getGenres()){
+        // cout << genero << " ";
     }
 
     cinemasArq.close();
