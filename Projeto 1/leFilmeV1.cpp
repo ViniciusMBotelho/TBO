@@ -1,14 +1,4 @@
-#include<iostream>
-#include<vector>
-#include<string>
-#include<fstream>
-#include<sstream>
-#include<chrono>
-#include<algorithm>
-// #include"Filme.hpp"
-// #include"Cinema.hpp"
 #include"Util.hpp"
-#define HASH_CONST 100
 
 using namespace std;
 
@@ -23,11 +13,11 @@ int main(){
     //***********FILMES*********** 
 
     vector<Filme> filmes[HASH_CONST];
-    Filme filmeAux;
     string coluna;
     string linha;
     stringstream ssLinha;
     ifstream filmesArq;
+    int i=0;
 
     filmesArq.open("dados/filmesCrop.txt");
 
@@ -39,80 +29,78 @@ int main(){
     getline(filmesArq, linha);
     linha.clear();
 
-    int i=0;
-
     while(getline(filmesArq, linha)){
         Filme filme;
         ssLinha.str(linha);
-                
-        getline(ssLinha, coluna, '\t'); //tconst
-        filme.setTconst(stoi(removeSpace(coluna, 2)));  //retirar o 'tt' do tconst
 
-        filme.setHash(stoi(removeSpace(coluna, 2))); //hash
+        {//Realiza a leitura dos filmes e extrai seus atributos
+            getline(ssLinha, coluna, '\t'); //tconst
+            filme.setTconst(stoi(removeSpace(coluna, 2)));  //retirar o 'tt' do tconst
 
-        getline(ssLinha, coluna, '\t'); //tittletype
-        filme.setTitleType(coluna);
-        
-        getline(ssLinha, coluna, '\t'); //primarytittle
-        filme.setPrimaryTitle(coluna);
+            filme.setHash(stoi(removeSpace(coluna, 2))); //hash
 
-        getline(ssLinha, coluna, '\t'); //originaltittle
-        filme.setOriginalTitle(coluna);
+            getline(ssLinha, coluna, '\t'); //tittletype
+            filme.setTitleType(coluna);
+            
+            getline(ssLinha, coluna, '\t'); //primarytittle
+            filme.setPrimaryTitle(coluna);
 
-        getline(ssLinha, coluna, '\t'); //isadult
-        if(isdigit(coluna[0]))
-            filme.setIsAdult(stoi(coluna));
-        else
-            filme.setIsAdult(-1);
+            getline(ssLinha, coluna, '\t'); //originaltittle
+            filme.setOriginalTitle(coluna);
 
-        getline(ssLinha, coluna, '\t'); //startYear
-        if(isdigit(coluna[0]))
-            filme.setStartYear(stoi(coluna));
-        else
-            filme.setStartYear(-1);
+            getline(ssLinha, coluna, '\t'); //isadult
+            if(isdigit(coluna[0]))
+                filme.setIsAdult(stoi(coluna));
+            else
+                filme.setIsAdult(-1);
 
-        getline(ssLinha, coluna, '\t'); //endYear
-        if(isdigit(coluna[0]))
-            filme.setEndYear(stoi(coluna));
-        else
-            filme.setEndYear(-1);
+            getline(ssLinha, coluna, '\t'); //startYear
+            if(isdigit(coluna[0]))
+                filme.setStartYear(stoi(coluna));
+            else
+                filme.setStartYear(-1);
 
-        getline(ssLinha, coluna, '\t'); //runtimeminutes
-        if(isdigit(coluna[0]))
-            filme.setRuntimeMinutes(stof(coluna));
-        else
-            filme.setRuntimeMinutes(-1);
+            getline(ssLinha, coluna, '\t'); //endYear
+            if(isdigit(coluna[0]))
+                filme.setEndYear(stoi(coluna));
+            else
+                filme.setEndYear(-1);
 
-        getline(ssLinha, coluna); //genres
-        stringstream ssAux;
-        string genero;
-        ssAux.str(coluna);
-        
-        if(coluna.find(',') == string::npos){  // separação dos generos
-            filme.setGenres(coluna);
-        }
-        else{
-            while(getline(ssAux, genero, ',')){
-                filme.setGenres(genero);
+            getline(ssLinha, coluna, '\t'); //runtimeminutes
+            if(isdigit(coluna[0]))
+                filme.setRuntimeMinutes(stof(coluna));
+            else
+                filme.setRuntimeMinutes(-1);
+
+            getline(ssLinha, coluna); //genres
+            stringstream ssAux;
+            string genero;
+            ssAux.str(coluna);
+            
+            if(coluna.find(',') == string::npos){  //separação dos generos
+                filme.setGenres(coluna);
+            }
+            else{
+                while(getline(ssAux, genero, ',')){
+                    filme.setGenres(genero);
+                }
             }
         }
         ssLinha.clear();
 
-        filmes[filme.getHash()].push_back(filme);
+        filmes[filme.getHash()].push_back(filme); //adiciona o filme na posição especificada pela hash
         i++;
     }
-    //imprime os filmes
-    // imprime(filmes);
 
     filmesArq.close();
 
-//***********CINEMAS*********** 
+    //***********CINEMAS*********** 
 
     ifstream cinemasArq;
     vector<Cinema> cinemas;
     string linhaCinema;
     string colunaCinema;
-    int idxCol = 0;  // indice para qual variável colunaCinema será direcioanado
+    int idxCol = 0;  //indice para qual variável colunaCinema será direcioanado
     
     cinemasArq.open("dados/cinemas.txt");
 
@@ -123,37 +111,38 @@ int main(){
     //remover a primeira linhaCinema
     getline(cinemasArq, linhaCinema); 
 
-    // Realiza a leitura de cinemas e extrais suas variáveis
+    //Realiza a leitura de cinemas e extrais seus atributos
     while(getline(cinemasArq, linhaCinema)){
         Cinema cinema;
         stringstream sslinhaCinema(linhaCinema);
 
         while(getline(sslinhaCinema, colunaCinema, ',')){
-            switch (idxCol){  // seta cada sub string em sua variável no objeto cinema
-            case 0:
+            switch (idxCol){  //seta cada sub string em seu atributo no objeto cinema
+            case 0: 
                 cinema.setCinema_id(colunaCinema);
                 break;
-            case 1:
+            case 1: 
                 cinema.setNome(removeSpace(colunaCinema, 1));
                 break;
-            case 2:
+            case 2: 
                 cinema.setCord_x(stoi(removeSpace(colunaCinema, 1)));
                 break;
-            case 3:
+            case 3: 
                 cinema.setCord_y(stoi(removeSpace(colunaCinema, 1)));
                 break;
-            case 4:
+            case 4: 
                 cinema.setPreco(stof(removeSpace(colunaCinema, 1)));
                 break;
-            default:  // define as referencias de cada filme dos cinemas
+            default:  //define as referencias de cada filme dentro de cinemas
                 cinema.setFilmes_exibicao(Util::movieReference(stoi(removeSpace(colunaCinema, 3)), filmes));
                 break;
             }
             idxCol++;
         }
         idxCol = 0;
-        cinemas.push_back(cinema);  // adiciona o cinema ao vetor
+        cinemas.push_back(cinema);  //adiciona o cinema ao vetor
     }
+
     cinemasArq.close();
 
     //termino da contagem do tempo do programa

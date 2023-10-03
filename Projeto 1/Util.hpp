@@ -1,4 +1,10 @@
 #include<iostream>
+#include<vector>
+#include<string>
+#include<fstream>
+#include<sstream>
+#include<chrono>
+#include<algorithm>
 #include"Filme.hpp"
 #include"Cinema.hpp"
 #define HASH_CONST 100
@@ -6,7 +12,6 @@
 class Util{
   public:
     static Filme* movieReference(int filmeId, vector<Filme> (&filmes)[HASH_CONST]){
-      
       Filme* fAux = new Filme;
       int hash = filmeId % 100;
 
