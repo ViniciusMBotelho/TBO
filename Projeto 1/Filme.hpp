@@ -5,7 +5,7 @@ using namespace std;
 
 class Filme{
     private:
-        string tconst;
+        int tconst;
         string titleType;
         string primaryTitle;
         string originalTitle;
@@ -18,12 +18,12 @@ class Filme{
         vector<string> cinema_id;
 
     public:
-        string getTconst()
+        int getTconst()
         {
             return tconst;
         }
 
-        void setTconst(string tconstA)
+        void setTconst(int tconstA)
         {
             tconst = tconstA;
         }

@@ -13,7 +13,6 @@ class Cinema{
         vector<Filme*> filmes_exibicao;
 
     public:
-
         void limpaFilmes(){
             filmes_exibicao.clear();
         }
@@ -66,8 +65,5 @@ class Cinema{
         {
             filmes_exibicao.push_back(filmes_exibicao1);
         }
-
-    public:
-        
 };
 

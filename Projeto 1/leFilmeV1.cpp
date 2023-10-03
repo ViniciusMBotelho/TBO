@@ -5,15 +5,18 @@
 #include<sstream>
 #include<chrono>
 #include<algorithm>
-#include"Filme.hpp"
-#include"Cinema.hpp"
+// #include"Filme.hpp"
+// #include"Cinema.hpp"
+#include"Util.hpp"
 #define HASH_CONST 100
 
 using namespace std;
 
 void imprime(vector<Filme> (&filmes)[HASH_CONST]);
 
-string removeSpace(string str);
+string removeSpace(string str, int quant);
+
+Filme* teste(int filmeId, vector<Filme> (&filmes)[HASH_CONST]);
 
 int main(){
     //inicio da contagem do tempo do programa
@@ -41,12 +44,11 @@ int main(){
     while(getline(filmesArq, linha)){
         Filme filme;
         ssLinha.str(linha);
-        
+                
         getline(ssLinha, coluna, '\t'); //tconst
-        filme.setTconst(coluna);
+        filme.setTconst(stoi(removeSpace(coluna, 2)));  //retirar o 'tt' do tconst
 
-        //retirar o 'tt' do tconst
-        filme.setHash(stoi(removeSpace(coluna))); //hash
+        filme.setHash(stoi(removeSpace(coluna, 2))); //hash
 
         getline(ssLinha, coluna, '\t'); //tittletype
         filme.setTitleType(coluna);
@@ -85,8 +87,8 @@ int main(){
         stringstream ssAux;
         string genero;
         ssAux.str(coluna);
-
-        if(coluna.find(',') == string::npos){
+        
+        if(coluna.find(',') == string::npos){  // separação dos generos
             filme.setGenres(coluna);
         }
         else{
@@ -99,27 +101,19 @@ int main(){
         filmes[filme.getHash()].push_back(filme);
         i++;
     }
-    //printar os filmes
+    //imprime os filmes
     // imprime(filmes);
 
     filmesArq.close();
 
 
-    for(vector<Filme> hash : filmes){
-        cout << hash.size() << " ";
-    }
-
-
-
-//*************************************************************************************************************************************************************
-//********************************CINEMAS 
+//***********CINEMAS*********** 
 
     ifstream cinemasArq;
     vector<Cinema> cinemas;
     string linhaCinema;
     string colunaCinema;
     int idxCol = 0;  // indice para qual variável colunaCinema será direcioanado
-    stringstream sslinhaCinema;
     
     cinemasArq.open("dados/cinemas.txt");
 
@@ -129,12 +123,12 @@ int main(){
     
     //remover a primeira linhaCinema
     getline(cinemasArq, linhaCinema); 
-    linhaCinema.clear();
-    
+    // linhaCinema.clear();
+
     // Realiza a leitura de cinemas e extrais suas variáveis
     while(getline(cinemasArq, linhaCinema)){
         Cinema cinema;
-        sslinhaCinema.str(linhaCinema);
+        stringstream sslinhaCinema(linhaCinema);
 
         while(getline(sslinhaCinema, colunaCinema, ',')){
             switch (idxCol){  // seta cada sub string em sua variável no objeto cinema
@@ -142,26 +136,37 @@ int main(){
                 cinema.setCinema_id(colunaCinema);
                 break;
             case 1:
-                cinema.setNome(removeSpace(colunaCinema));
+                cinema.setNome(removeSpace(colunaCinema, 1));
                 break;
             case 2:
-                cinema.setCord_x(stoi(removeSpace(colunaCinema)));
+                cinema.setCord_x(stoi(removeSpace(colunaCinema, 1)));
                 break;
             case 3:
-                cinema.setCord_y(stoi(removeSpace(colunaCinema)));
+                cinema.setCord_y(stoi(removeSpace(colunaCinema, 1)));
                 break;
             case 4:
-                cinema.setPreco(stof(removeSpace(colunaCinema)));
+                cinema.setPreco(stof(removeSpace(colunaCinema, 1)));
                 break;
             default:
-                // cinema.setFilmes_exibicao();
+                cinema.setFilmes_exibicao(Util::movieReference(stoi(removeSpace(colunaCinema, 3)), filmes));
                 break;
             }
             idxCol++;
         }
         idxCol = 0;
-        cinemas.push_back(cinema);  // adiciona o filme no vetor
+        cinemas.push_back(cinema);  // adiciona o cinema ao vetor
+
+        for(Filme* filme: cinema.getFilmes_exibicao()){
+            if(filme != nullptr){
+                cout << filme->getPrimaryTitle() << " ";
+            }
+            else
+                cout << -1 << ' ';
+        }
+        cout << endl;
     }
+
+    cinemasArq.close();
 
     // for(int i=0; i<cinemas.size(); i++){  // imprime todos filmes exibidos pelos cinemas
     //     for(int j=0; j<cinemas[i].getFilmes_exibicao().size(); j++){
@@ -169,7 +174,6 @@ int main(){
     //     }
     //     cout << endl;
     // }
-
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
@@ -202,7 +206,7 @@ void imprime(vector<Filme> (&filmes)[HASH_CONST]){
     }
 }
 
-string removeSpace(string str){  // apaga o primeiro caracter (espaço em branco)
-    str.erase(0, 2);
+string removeSpace(string str, int quant){  // apaga o primeiro caracter (espaço em branco)
+    str.erase(0, quant);
     return str;
 }
