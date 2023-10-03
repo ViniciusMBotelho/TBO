@@ -13,6 +13,7 @@ class Filme{
         int startYear;
         int endYear;
         int runtimeMinutes;
+        int hash;
         vector<string> genres;
         vector<string> cinema_id;
 
@@ -112,8 +113,18 @@ class Filme{
             return cinema_id;
         }
 
-        void setCinema_id(vector<string> cinema_id)
+        void setCinema_id(string cinema_idA)
         {
-            cinema_id = cinema_id;
+            cinema_id.push_back(cinema_idA);
+        }
+
+        int getHash()
+        {
+            return hash;
+        }
+
+        void setHash(int hashA)
+        {
+            hash = hashA%12;
         }
 };

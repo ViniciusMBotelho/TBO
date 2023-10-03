@@ -11,7 +11,7 @@ class Cinema{
         int cord_x;
         int cord_y;
         float preco;
-        vector<string> filmes_exibicao;
+        vector<Filme*> filmes_exibicao;
 
     public:
 
@@ -59,11 +59,11 @@ class Cinema{
         {
             preco = preco1;
         }
-        vector<string> getFilmes_exibicao()
+        vector<Filme*> getFilmes_exibicao()
         {
             return filmes_exibicao;
         }
-        void setFilmes_exibicao(string filmes_exibicao1)
+        void setFilmes_exibicao(Filme* filmes_exibicao1)
         {
             filmes_exibicao.push_back(filmes_exibicao1);
         }

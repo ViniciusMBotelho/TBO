@@ -10,10 +10,7 @@
 
 using namespace std;
 
-string removeSpace(string str){  // apaga o primeiro caracter (espaço em branco)
-    str.erase(0, 1);
-    return str;
-}
+string removeSpace(string str);
 
 int main(){
     ifstream cinemasArq;
@@ -48,7 +45,7 @@ int main(){
                 cinema.setPreco(stof(removeSpace(seg)));
                 break;
             default:
-                cinema.setFilmes_exibicao(removeSpace(seg));
+                // cinema.setFilmes_exibicao();
                 break;
             }
             idxCol++;
@@ -63,4 +60,9 @@ int main(){
         }
         cout << endl;
     }
+}
+
+string removeSpace(string str){  // apaga o primeiro caracter (espaço em branco)
+    str.erase(0, 1);
+    return str;
 }
