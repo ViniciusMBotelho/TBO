@@ -7,16 +7,15 @@ class Util{
   public:
     static Filme* movieReference(int filmeId, vector<Filme> (&filmes)[HASH_CONST]){
       
+      Filme* fAux = new Filme;
       int hash = filmeId % 100;
 
-      if(filmes[hash].size() != 0){
-        for(Filme filme: filmes[hash]){
+      if(filmes[hash].size() != 0)
+        for(Filme filme: filmes[hash])
           if(filmeId == filme.getTconst()){
-            return &filme;
+            *fAux = filme;
+            return fAux;
           }
-        }
-      }
-      else
-        return nullptr;
+      return nullptr;
     }
 };

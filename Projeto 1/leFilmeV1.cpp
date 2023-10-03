@@ -16,12 +16,12 @@ void imprime(vector<Filme> (&filmes)[HASH_CONST]);
 
 string removeSpace(string str, int quant);
 
-Filme* teste(int filmeId, vector<Filme> (&filmes)[HASH_CONST]);
-
 int main(){
     //inicio da contagem do tempo do programa
     auto start = chrono::high_resolution_clock::now();
     
+    //***********FILMES*********** 
+
     vector<Filme> filmes[HASH_CONST];
     Filme filmeAux;
     string coluna;
@@ -106,7 +106,6 @@ int main(){
 
     filmesArq.close();
 
-
 //***********CINEMAS*********** 
 
     ifstream cinemasArq;
@@ -123,7 +122,6 @@ int main(){
     
     //remover a primeira linhaCinema
     getline(cinemasArq, linhaCinema); 
-    // linhaCinema.clear();
 
     // Realiza a leitura de cinemas e extrais suas variáveis
     while(getline(cinemasArq, linhaCinema)){
@@ -147,7 +145,7 @@ int main(){
             case 4:
                 cinema.setPreco(stof(removeSpace(colunaCinema, 1)));
                 break;
-            default:
+            default:  // define as referencias de cada filme dos cinemas
                 cinema.setFilmes_exibicao(Util::movieReference(stoi(removeSpace(colunaCinema, 3)), filmes));
                 break;
             }
@@ -155,25 +153,8 @@ int main(){
         }
         idxCol = 0;
         cinemas.push_back(cinema);  // adiciona o cinema ao vetor
-
-        for(Filme* filme: cinema.getFilmes_exibicao()){
-            if(filme != nullptr){
-                cout << filme->getPrimaryTitle() << " ";
-            }
-            else
-                cout << -1 << ' ';
-        }
-        cout << endl;
     }
-
     cinemasArq.close();
-
-    // for(int i=0; i<cinemas.size(); i++){  // imprime todos filmes exibidos pelos cinemas
-    //     for(int j=0; j<cinemas[i].getFilmes_exibicao().size(); j++){
-    //         cout << cinemas[i].getFilmes_exibicao()[j] << " ";
-    //     }
-    //     cout << endl;
-    // }
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
