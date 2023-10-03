@@ -6,40 +6,39 @@
 #include<chrono>
 #include<algorithm>
 #include"Filme.hpp"
+#include"Cinema.hpp"
+#define HASH_CONST 100
 
 using namespace std;
 
-void imprime(vector<Filme> (&filmes)[100]);
+void imprime(vector<Filme> (&filmes)[HASH_CONST]);
 
 string removeSpace(string str);
 
 int main(){
     //inicio da contagem do tempo do programa
     auto start = chrono::high_resolution_clock::now();
-    vector<Filme> filmes[100];
+    
+    vector<Filme> filmes[HASH_CONST];
     Filme filmeAux;
-
     string coluna;
     string linha;
+    stringstream ssLinha;
+    ifstream filmesArq;
 
-    ifstream cinemasArq;
-    cinemasArq.open("dados/filmesCrop.txt");
+    filmesArq.open("dados/filmesCrop.txt");
 
-    if(!cinemasArq.is_open()){
+    if(!filmesArq.is_open()){
         std::cout << "NAO ABERTO" << endl;
     }
     
     //remover a primeira linha
-    getline(cinemasArq, linha);
+    getline(filmesArq, linha);
     linha.clear();
 
-    stringstream ssLinha;
-    
     int i=0;
 
-
-    while(getline(cinemasArq, linha) && i<100){
-        
+    while(getline(filmesArq, linha)){
         Filme filme;
         ssLinha.str(linha);
         
@@ -101,9 +100,76 @@ int main(){
         i++;
     }
     //printar os filmes
-    imprime(filmes);
+    // imprime(filmes);
 
-    cinemasArq.close();
+    filmesArq.close();
+
+
+    for(vector<Filme> hash : filmes){
+        cout << hash.size() << " ";
+    }
+
+
+
+//*************************************************************************************************************************************************************
+//********************************CINEMAS 
+
+    ifstream cinemasArq;
+    vector<Cinema> cinemas;
+    string linhaCinema;
+    string colunaCinema;
+    int idxCol = 0;  // indice para qual variável colunaCinema será direcioanado
+    stringstream sslinhaCinema;
+    
+    cinemasArq.open("dados/cinemas.txt");
+
+    if(!cinemasArq.is_open()){
+        std::cout << "NAO ABERTO" << endl;
+    }
+    
+    //remover a primeira linhaCinema
+    getline(cinemasArq, linhaCinema); 
+    linhaCinema.clear();
+    
+    // Realiza a leitura de cinemas e extrais suas variáveis
+    while(getline(cinemasArq, linhaCinema)){
+        Cinema cinema;
+        sslinhaCinema.str(linhaCinema);
+
+        while(getline(sslinhaCinema, colunaCinema, ',')){
+            switch (idxCol){  // seta cada sub string em sua variável no objeto cinema
+            case 0:
+                cinema.setCinema_id(colunaCinema);
+                break;
+            case 1:
+                cinema.setNome(removeSpace(colunaCinema));
+                break;
+            case 2:
+                cinema.setCord_x(stoi(removeSpace(colunaCinema)));
+                break;
+            case 3:
+                cinema.setCord_y(stoi(removeSpace(colunaCinema)));
+                break;
+            case 4:
+                cinema.setPreco(stof(removeSpace(colunaCinema)));
+                break;
+            default:
+                // cinema.setFilmes_exibicao();
+                break;
+            }
+            idxCol++;
+        }
+        idxCol = 0;
+        cinemas.push_back(cinema);  // adiciona o filme no vetor
+    }
+
+    // for(int i=0; i<cinemas.size(); i++){  // imprime todos filmes exibidos pelos cinemas
+    //     for(int j=0; j<cinemas[i].getFilmes_exibicao().size(); j++){
+    //         cout << cinemas[i].getFilmes_exibicao()[j] << " ";
+    //     }
+    //     cout << endl;
+    // }
+
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
@@ -113,7 +179,7 @@ int main(){
     std::cout << "Tempo de execucao: " << duration.count() << " milissegundos" << endl;
 }
 
-void imprime(vector<Filme> (&filmes)[100]){
+void imprime(vector<Filme> (&filmes)[HASH_CONST]){
     for(vector<Filme> filmeHash : filmes){
         std::cout << endl;
         

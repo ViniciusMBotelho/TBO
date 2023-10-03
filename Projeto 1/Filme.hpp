@@ -125,6 +125,6 @@ class Filme{
 
         void setHash(int hashA)
         {
-            hash = hashA%12;
+            hash = hashA%100;
         }
 };
