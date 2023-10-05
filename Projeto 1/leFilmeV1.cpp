@@ -1,4 +1,6 @@
-#include"Util.hpp"
+#include"Filtro.hpp"
+#include"array"
+// #include"Filtro.hpp"
 
 using namespace std;
 
@@ -145,6 +147,15 @@ int main(){
 
     cinemasArq.close();
 
+    //***********FILTROS*********** 
+
+    vector<Filme> filmesFiltro[HASH_CONST];
+    std::copy_n(filmes, HASH_CONST, filmesFiltro);
+
+    vector<string> tiposBusca = {"short"};
+    // Filtro::tipo(filmes, filmesFiltro, tiposBusca);
+    Filtro::tipoEx(filmesFiltro, tiposBusca);
+
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
     // Calcular a duração da execução
@@ -180,3 +191,4 @@ string removeSpace(string str, int quant){  // apaga o primeiro caracter (espaç
     str.erase(0, quant);
     return str;
 }
+
