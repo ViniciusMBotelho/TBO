@@ -2,32 +2,29 @@
 
 class Filtro{
     public:
-        static void tipo(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], vector<string> tipos){
+        static void tipo(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo){
             int hashTmp;
-            for(vector<Filme> hash: filmes){
-                for(Filme filme: hash){
-                    if(filme.getTitleType().compare(tipos[0]) == 0){
-                        hashTmp = filme.getTconst() % 100;
+            for(vector<Filme> hash: filmes)
+                for(Filme filme: hash)
+                    if(filme.getTitleType().compare(tipo) == 0){
+                        hashTmp = filme.getTconst() % HASH_CONST;
                         filmesFiltro[hashTmp].push_back(filme);
                     }
-                }
-            }
         }
 
-        static void tipoEx(vector<Filme> (&filmesFiltro)[HASH_CONST], vector<string> tipos){
-            // testando o tempo de execução removendo os elementos da lista ao invés de preencher
+        static void genero(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], vector<string> generos){
 
-            int i = 0;
             int hashTmp;
-            for(vector<Filme> hash: filmesFiltro){
-                for(Filme filme: hash){
-                    if(filme.getTitleType().compare(tipos[0]) != 0){
-                        hashTmp = filme.getTconst() % 100;
-                        hash.erase(1);
-                    }
-                    i++;
-                }
-                i=0;
-            }
+            for(vector<Filme> hash: filmes)
+                for(Filme filme: hash)
+                    for(string generoFilme: filme.getGenres())
+                        for(string genero: generos)
+                            if(generoFilme.compare(genero) == 0){
+                                hashTmp = filme.getTconst() % HASH_CONST;
+                                filmesFiltro->push_back(filme);
+                                break;
+                            }       
         }
+
+        
 };

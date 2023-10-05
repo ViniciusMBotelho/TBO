@@ -1,5 +1,4 @@
 #include"Filtro.hpp"
-#include"array"
 // #include"Filtro.hpp"
 
 using namespace std;
@@ -22,7 +21,6 @@ int main(){
     int i=0;
 
     filmesArq.open("dados/filmesCrop.txt");
-
     if(!filmesArq.is_open()){
         std::cout << "NAO ABERTO" << endl;
     }
@@ -150,11 +148,16 @@ int main(){
     //***********FILTROS*********** 
 
     vector<Filme> filmesFiltro[HASH_CONST];
-    std::copy_n(filmes, HASH_CONST, filmesFiltro);
 
-    vector<string> tiposBusca = {"short"};
-    // Filtro::tipo(filmes, filmesFiltro, tiposBusca);
-    Filtro::tipoEx(filmesFiltro, tiposBusca);
+    string tiposBusca = "video";
+    Filtro::tipo(filmes, filmesFiltro, tiposBusca);
+
+    vector<string> generosBusca = {"Action","Short"};
+    Filtro::genero(filmes, filmesFiltro, generosBusca);
+
+
+    // imprime(filmesFiltro);
+
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
