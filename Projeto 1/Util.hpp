@@ -5,9 +5,9 @@
 #include<sstream>
 #include<chrono>
 #include<algorithm>
-#define HASH_CONST 100
 #include"Filme.hpp"
 #include"Cinema.hpp"
+#define HASH_CONST 100
 
 class Util{
   public:

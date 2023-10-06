@@ -1,5 +1,4 @@
-#include"Filtro.hpp"
-// #include"Filtro.hpp"
+#include"FiltroTeste.hpp"
 
 using namespace std;
 
@@ -149,14 +148,17 @@ int main(){
 
     vector<Filme> filmesFiltro[HASH_CONST];
 
+
+    vector<string> generosBusca = {""};
     string tiposBusca = "video";
-    Filtro::tipo(filmes, filmesFiltro, tiposBusca);
+    int anoSup = -2;
+    int anoInf = -2;
+    int duracaoSup = -2;
+    int duracaoInf = -2;
 
-    vector<string> generosBusca = {"Action","Short"};
-    Filtro::genero(filmes, filmesFiltro, generosBusca);
+    FiltroTeste::busca(filmes,filmesFiltro,tiposBusca,duracaoInf,duracaoSup,generosBusca,anoInf,anoSup);
 
-
-    // imprime(filmesFiltro);
+    imprime(filmesFiltro);
 
 
     //termino da contagem do tempo do programa
