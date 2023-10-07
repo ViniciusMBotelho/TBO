@@ -28,61 +28,59 @@ int main(){
     getline(filmesArq, linha);
     linha.clear();
 
-    while(getline(filmesArq, linha)){
+    while(getline(filmesArq, linha)){ //Realiza a leitura dos filmes e extrai seus atributos
         Filme filme;
         ssLinha.str(linha);
 
-        {//Realiza a leitura dos filmes e extrai seus atributos
-            getline(ssLinha, coluna, '\t'); //tconst
-            filme.setTconst(stoi(removeSpace(coluna, 2)));  //retirar o 'tt' do tconst
+        getline(ssLinha, coluna, '\t'); //tconst
+        filme.setTconst(stoi(removeSpace(coluna, 2)));  //retirar o 'tt' do tconst
 
-            filme.setHash(stoi(removeSpace(coluna, 2))); //hash
+        filme.setHash(stoi(removeSpace(coluna, 2))); //hash
 
-            getline(ssLinha, coluna, '\t'); //tittletype
-            filme.setTitleType(coluna);
-            
-            getline(ssLinha, coluna, '\t'); //primarytittle
-            filme.setPrimaryTitle(coluna);
+        getline(ssLinha, coluna, '\t'); //tittletype
+        filme.setTitleType(coluna);
+        
+        getline(ssLinha, coluna, '\t'); //primarytittle
+        filme.setPrimaryTitle(coluna);
 
-            getline(ssLinha, coluna, '\t'); //originaltittle
-            filme.setOriginalTitle(coluna);
+        getline(ssLinha, coluna, '\t'); //originaltittle
+        filme.setOriginalTitle(coluna);
 
-            getline(ssLinha, coluna, '\t'); //isadult
-            if(isdigit(coluna[0]))
-                filme.setIsAdult(stoi(coluna));
-            else
-                filme.setIsAdult(-1);
+        getline(ssLinha, coluna, '\t'); //isadult
+        if(isdigit(coluna[0]))
+            filme.setIsAdult(stoi(coluna));
+        else
+            filme.setIsAdult(-1);
 
-            getline(ssLinha, coluna, '\t'); //startYear
-            if(isdigit(coluna[0]))
-                filme.setStartYear(stoi(coluna));
-            else
-                filme.setStartYear(-1);
+        getline(ssLinha, coluna, '\t'); //startYear
+        if(isdigit(coluna[0]))
+            filme.setStartYear(stoi(coluna));
+        else
+            filme.setStartYear(-1);
 
-            getline(ssLinha, coluna, '\t'); //endYear
-            if(isdigit(coluna[0]))
-                filme.setEndYear(stoi(coluna));
-            else
-                filme.setEndYear(-1);
+        getline(ssLinha, coluna, '\t'); //endYear
+        if(isdigit(coluna[0]))
+            filme.setEndYear(stoi(coluna));
+        else
+            filme.setEndYear(-1);
 
-            getline(ssLinha, coluna, '\t'); //runtimeminutes
-            if(isdigit(coluna[0]))
-                filme.setRuntimeMinutes(stof(coluna));
-            else
-                filme.setRuntimeMinutes(-1);
+        getline(ssLinha, coluna, '\t'); //runtimeminutes
+        if(isdigit(coluna[0]))
+            filme.setRuntimeMinutes(stof(coluna));
+        else
+            filme.setRuntimeMinutes(-1);
 
-            getline(ssLinha, coluna); //genres
-            stringstream ssAux;
-            string genero;
-            ssAux.str(coluna);
-            
-            if(coluna.find(',') == string::npos){  //separação dos generos
-                filme.setGenres(coluna);
-            }
-            else{
-                while(getline(ssAux, genero, ',')){
-                    filme.setGenres(genero);
-                }
+        getline(ssLinha, coluna); //genres
+        stringstream ssAux;
+        string genero;
+        ssAux.str(coluna);
+        
+        if(coluna.find(',') == string::npos){  //separação dos generos
+            filme.setGenres(coluna);
+        }
+        else{
+            while(getline(ssAux, genero, ',')){
+                filme.setGenres(genero);
             }
         }
         ssLinha.clear();
@@ -147,10 +145,11 @@ int main(){
     //***********FILTROS*********** 
 
     vector<Filme> filmesFiltro[HASH_CONST];
-
-
-    vector<string> generosBusca = {""};
-    string tiposBusca = "video";
+    //short
+    vector<string> generosBusca;
+    generosBusca.clear();
+    generosBusca = {"Short","Drama"};
+    string tiposBusca = "";
     int anoSup = -2;
     int anoInf = -2;
     int duracaoSup = -2;
@@ -159,7 +158,6 @@ int main(){
     FiltroTeste::busca(filmes,filmesFiltro,tiposBusca,duracaoInf,duracaoSup,generosBusca,anoInf,anoSup);
 
     imprime(filmesFiltro);
-
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
@@ -171,7 +169,6 @@ int main(){
 
 void imprime(vector<Filme> (&filmes)[HASH_CONST]){
     for(vector<Filme> filmeHash : filmes){
-        std::cout << endl;
         
         for(Filme filme : filmeHash){
             std::cout << filme.getTconst()<<" ";
