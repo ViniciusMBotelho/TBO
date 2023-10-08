@@ -2,7 +2,8 @@
 
 using namespace std;
 
-void imprime(vector<Filme> (&filmes)[HASH_CONST]);
+void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]);
+void imprimeCinemas(vector<Cinema> (&cinemas));
 
 string removeSpace(string str, int quant);
 
@@ -145,19 +146,24 @@ int main(){
     //***********FILTROS*********** 
 
     vector<Filme> filmesFiltro[HASH_CONST];
-    //short
     vector<string> generosBusca;
     generosBusca.clear();
-    generosBusca = {"Short","Drama"};
+    // generosBusca = {"Short","Drama"};
     string tiposBusca = "";
     int anoSup = -2;
     int anoInf = -2;
     int duracaoSup = -2;
     int duracaoInf = -2;
 
-    FiltroTeste::busca(filmes,filmesFiltro,tiposBusca,duracaoInf,duracaoSup,generosBusca,anoInf,anoSup);
+    FiltroTeste::buscaFilme(filmes,filmesFiltro,tiposBusca,duracaoInf,duracaoSup,generosBusca,anoInf,anoSup);
 
-    imprime(filmesFiltro);
+    vector<Cinema> cinemasFiltro;
+    
+
+    // FiltroTeste::buscaCinema();
+
+    // imprimeCinemas(cinemas);
+    // imprimeFilmes(filmesFiltro);
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
@@ -167,9 +173,9 @@ int main(){
     std::cout << "Tempo de execucao: " << duration.count() << " milissegundos" << endl;
 }
 
-void imprime(vector<Filme> (&filmes)[HASH_CONST]){
+void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]){
+
     for(vector<Filme> filmeHash : filmes){
-        
         for(Filme filme : filmeHash){
             std::cout << filme.getTconst()<<" ";
             std::cout << filme.getTitleType()<<" ";
@@ -186,6 +192,22 @@ void imprime(vector<Filme> (&filmes)[HASH_CONST]){
 
             std::cout << endl;
         }
+    }
+}
+
+void imprimeCinemas(vector<Cinema> (&cinemas)){
+
+    for(Cinema cinema: cinemas){
+        std::cout << cinema.getCinema_id()<<" ";
+        std::cout << cinema.getNome()<<" ";
+        std::cout << cinema.getCord_x()<<" ";
+        std::cout << cinema.getCord_y()<<" ";
+        std::cout << cinema.getPreco()<<" ";
+        for(Filme* filmeExibicao: cinema.getFilmes_exibicao()){
+            if(filmeExibicao != nullptr)
+                std::cout << "tt"<<filmeExibicao->getTconst()<<" ";
+        }
+        std::cout<<endl;
     }
 }
 

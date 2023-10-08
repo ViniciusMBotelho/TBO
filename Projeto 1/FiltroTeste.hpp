@@ -2,10 +2,11 @@
 
 class FiltroTeste {
     public:
-        static void busca(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, int duracaoInf, int duracaoSup, vector<string> generos, int anoInf, int anoSup){
+        static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, int duracaoInf, int duracaoSup, vector<string> generos, int anoInf, int anoSup){
             int hashTmp;
             bool confirmacao, entrou;
             
+                // Filtros filmes
                 for(vector<Filme> hash: filmes)
                     for(Filme filme: hash){
                         confirmacao = true;
@@ -18,7 +19,7 @@ class FiltroTeste {
                             }
                         }
                         if(duracaoInf != -2 && duracaoSup != -2){ //verifica se o filtro foi selecionado
-                            if(!(duracaoInf <= filme.getRuntimeMinutes() && duracaoSup >= filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
+                            if((duracaoInf > filme.getRuntimeMinutes() || duracaoSup < filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
                                 confirmacao = false;
                                 continue;
                             }
@@ -40,6 +41,7 @@ class FiltroTeste {
                                     continue;
                                 }
                         }
+                        // short, action, drama
                         // melhorar a variavel de controle
                         if(!generos.empty()){  //verifica se o filtro foi selecionado
                             for(string generoFilme: filme.getGenres()){
@@ -57,8 +59,10 @@ class FiltroTeste {
                             filmesFiltro[hashTmp].push_back(filme);
                         }
                     }
-
-
         }
 
+        static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, int duracaoInf, int duracaoSup, int distancia, float preco, int anoInf, int anoSup){
+
+            
+        }
 };
