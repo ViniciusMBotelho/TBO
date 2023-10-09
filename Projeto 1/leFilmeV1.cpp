@@ -147,23 +147,33 @@ int main(){
 
     vector<Filme> filmesFiltro[HASH_CONST];
     vector<string> generosBusca;
+    vector<int> limiteDuracoes = {-2,-2};
+    vector<int> limiteAnos = {-2,-2};
     generosBusca.clear();
-    // generosBusca = {"Short","Drama"};
+    generosBusca = {"Short","Drama"};
     string tiposBusca = "";
-    int anoSup = -2;
-    int anoInf = -2;
-    int duracaoSup = -2;
-    int duracaoInf = -2;
 
-    FiltroTeste::buscaFilme(filmes,filmesFiltro,tiposBusca,duracaoInf,duracaoSup,generosBusca,anoInf,anoSup);
+    // FiltroTeste::buscaFilme(filmes,filmesFiltro,tiposBusca,limiteDuracoes,generosBusca,limiteAnos);
+
+    // imprimeFilmes(filmesFiltro);
 
     vector<Cinema> cinemasFiltro;
+    vector<string> tiposBuscaCinema;
+    vector<string> generosBuscaCinema;
+    vector<int> limiteDuracoesCinema = {-2,-2};
+    vector<int> limiteAnosCinema = {-2,-2};
+    int distancia;
+    float preco;
+    tiposBuscaCinema.clear();
+    generosBuscaCinema.clear();
+    tiposBuscaCinema = {"short","video"};
     
 
-    // FiltroTeste::buscaCinema();
+    FiltroTeste::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
 
-    // imprimeCinemas(cinemas);
-    // imprimeFilmes(filmesFiltro);
+    imprimeCinemas(cinemasFiltro);
+
+    // cout<<cinemas[0].getFilmes_exibicao()[0]->getTconst();
 
     //termino da contagem do tempo do programa
     auto end = chrono::high_resolution_clock::now();
@@ -189,7 +199,6 @@ void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]){
             for(string genero: filme.getGenres()){
                 std::cout << genero << " ";
             }
-
             std::cout << endl;
         }
     }

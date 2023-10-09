@@ -2,7 +2,7 @@
 
 class FiltroTeste {
     public:
-        static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, int duracaoInf, int duracaoSup, vector<string> generos, int anoInf, int anoSup){
+        static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, vector<int> limitesDuracoes, vector<string> generos, vector<int>limiteAnos){
             int hashTmp;
             bool confirmacao, entrou;
             
@@ -18,25 +18,25 @@ class FiltroTeste {
                                 continue;
                             }
                         }
-                        if(duracaoInf != -2 && duracaoSup != -2){ //verifica se o filtro foi selecionado
-                            if((duracaoInf > filme.getRuntimeMinutes() || duracaoSup < filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
+                        if(limitesDuracoes[0] != -2 && limitesDuracoes[1] != -2){ //verifica se o filtro foi selecionado
+                            if((limitesDuracoes[0] > filme.getRuntimeMinutes() || limitesDuracoes[1] < filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
                                 confirmacao = false;
                                 continue;
                             }
                         }
-                        if(anoInf != -2 && anoSup != -2){  //verifica se o filtro foi selecionado                               
+                        if(limiteAnos[0] != -2 && limiteAnos[1] != -2){  //verifica se o filtro foi selecionado                               
                             if(filme.getStartYear() != -1 && filme.getEndYear() != -1)
-                                if(!(filme.getStartYear() >= anoInf && filme.getEndYear() <= anoSup)){
+                                if(!(filme.getStartYear() >= limiteAnos[0] && filme.getEndYear() <= limiteAnos[1])){
                                     confirmacao = false;
                                     continue;
                                 }
                             if(filme.getStartYear() == -1)
-                                if(!(anoInf <= filme.getEndYear() && anoSup >= filme.getEndYear())){
+                                if(!(limiteAnos[0] <= filme.getEndYear() && limiteAnos[1] >= filme.getEndYear())){
                                     confirmacao = false;
                                     continue;
                                 }
                             if(filme.getEndYear() == -1)
-                                if(!(anoInf <= filme.getStartYear() && anoSup >= filme.getStartYear())){
+                                if(!(limiteAnos[0] <= filme.getStartYear() && limiteAnos[1] >= filme.getStartYear())){
                                     confirmacao = false;
                                     continue;
                                 }
@@ -61,8 +61,52 @@ class FiltroTeste {
                     }
         }
 
-        static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, int duracaoInf, int duracaoSup, int distancia, float preco, int anoInf, int anoSup){
 
-            
+        static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, vector<int> limitesDuracoes, int distancia, float preco, vector<int>limiteAnos){
+
+            bool confirmacao;
+            bool entrou;
+
+            for(Cinema cinema: cinemas){
+                confirmacao = true;
+                entrou = false;
+
+                if(!tipos.empty()){  // filtro tipos
+                    for(Filme* filme: cinema.getFilmes_exibicao()){
+                        if((filme == nullptr || !buscaString(tipos, filme->getTitleType()))){
+                            confirmacao = false;
+                            entrou = true;
+                            // break;
+                        }
+                        else if(entrou){
+                            confirmacao = true;
+                        }
+                    }
+                }
+
+                // if(!generos.empty()){
+                //     for(Filme* filme: cinema.getFilmes_exibicao()){
+                //         for(string genero: generos){
+                //             if(filme != nullptr && !buscaString(filme->getGenres(), genero)){
+                //                 confirmacao = false;
+                //                 break;
+                //             }
+                //         }
+                //     }
+                // }
+
+                if(confirmacao){ //verifica se o cinema atual atende os filtros
+                    cinemasFiltro.push_back(cinema);
+                }
+            }
+        }
+
+    private:
+        static bool buscaString(vector<string> vetor, string alvo){
+            for(string str: vetor){
+                if(str.compare(alvo) == 0)
+                    return true;
+            }
+            return false;
         }
 };
