@@ -97,6 +97,7 @@ class FiltroTeste {
                     }
                 }
 
+
                 if(confirmacao){ //verifica se o cinema atual atende os filtros
                     cinemasFiltro.push_back(cinema);
                 }
