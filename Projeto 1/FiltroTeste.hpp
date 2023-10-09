@@ -2,7 +2,7 @@
 
 class FiltroTeste {
     public:
-        static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, vector<int> limitesDuracoes, vector<string> generos, vector<int>limiteAnos){
+        static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, int duraInf, int duraSup, vector<string> generos, int anoInf, int anoSup){
             int hashTmp;
             bool confirmacao, entrou;
             
@@ -18,31 +18,30 @@ class FiltroTeste {
                                 continue;
                             }
                         }
-                        if(limitesDuracoes[0] != -2 && limitesDuracoes[1] != -2){ //verifica se o filtro foi selecionado
-                            if((limitesDuracoes[0] > filme.getRuntimeMinutes() || limitesDuracoes[1] < filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
+                        if(duraInf != -2 && duraSup != -2){ //verifica se o filtro foi selecionado
+                            if((duraInf > filme.getRuntimeMinutes() || duraSup < filme.getRuntimeMinutes())){//verifica se o filme nao esta entre o intervalo proposto
                                 confirmacao = false;
                                 continue;
                             }
                         }
-                        if(limiteAnos[0] != -2 && limiteAnos[1] != -2){  //verifica se o filtro foi selecionado                               
+                        if(anoInf != -2 && anoSup != -2){  //verifica se o filtro foi selecionado                               
                             if(filme.getStartYear() != -1 && filme.getEndYear() != -1)
-                                if(!(filme.getStartYear() >= limiteAnos[0] && filme.getEndYear() <= limiteAnos[1])){
+                                if(!(filme.getStartYear() >= anoInf && filme.getEndYear() <= anoSup)){
                                     confirmacao = false;
                                     continue;
                                 }
                             if(filme.getStartYear() == -1)
-                                if(!(limiteAnos[0] <= filme.getEndYear() && limiteAnos[1] >= filme.getEndYear())){
+                                if(!(anoInf <= filme.getEndYear() && anoSup >= filme.getEndYear())){
                                     confirmacao = false;
                                     continue;
                                 }
                             if(filme.getEndYear() == -1)
-                                if(!(limiteAnos[0] <= filme.getStartYear() && limiteAnos[1] >= filme.getStartYear())){
+                                if(!(anoInf <= filme.getStartYear() && anoSup >= filme.getStartYear())){
                                     confirmacao = false;
                                     continue;
                                 }
                         }
-                        // short, action, drama
-                        // melhorar a variavel de controle
+
                         if(!generos.empty()){  //verifica se o filtro foi selecionado
                             for(string generoFilme: filme.getGenres()){
                                 for(string genero: generos)
@@ -82,20 +81,21 @@ class FiltroTeste {
                     }
                 }
 
-                // if(!generos.empty()){
-                //     for(Filme* filme: cinema.getFilmes_exibicao()){
-                //         for(string genero: generos){
-                //             if(filme != nullptr || !buscaString(filme->getGenres(), genero)){
-                //                 confirmacao = false;
-                //                 continue;
-                //             }
-                //             if(buscaString(filme->getGenres(), genero)){
-                //                 confirmacao = true;
-                //                 break;
-                //             }
-                //         }
-                //     }
-                // }
+                // action, drama
+                if(!generos.empty()){
+                    for(Filme* filme: cinema.getFilmes_exibicao()){
+                        for(string genero: generos){
+                            if(filme == nullptr || !buscaString(filme->getGenres(), genero)){
+                                confirmacao = false;
+                                continue;
+                            }
+                            else{
+                                confirmacao = true;
+                                break;
+                            }
+                        }
+                    }
+                }
 
                 if(confirmacao){ //verifica se o cinema atual atende os filtros
                     cinemasFiltro.push_back(cinema);
