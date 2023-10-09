@@ -144,7 +144,7 @@ int main(){
     cinemasArq.close();
 
     //***********FILTROS*********** 
-
+    //***********FILMES*********** 
     vector<Filme> filmesFiltro[HASH_CONST];
     vector<string> generosBusca;
     vector<int> limiteDuracoes = {-2,-2};
@@ -157,6 +157,8 @@ int main(){
 
     // imprimeFilmes(filmesFiltro);
 
+
+    //***********CINEMA*********** 
     vector<Cinema> cinemasFiltro;
     vector<string> tiposBuscaCinema;
     vector<string> generosBuscaCinema;
@@ -167,8 +169,8 @@ int main(){
     tiposBuscaCinema.clear();
     generosBuscaCinema.clear();
     tiposBuscaCinema = {"short","video"};
+    generosBuscaCinema = {"action"};
     
-
     FiltroTeste::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
 
     imprimeCinemas(cinemasFiltro);

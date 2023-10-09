@@ -64,22 +64,20 @@ class FiltroTeste {
 
         static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, vector<int> limitesDuracoes, int distancia, float preco, vector<int>limiteAnos){
 
-            bool confirmacao;
-            bool entrou;
+            bool confirmacao;;
 
             for(Cinema cinema: cinemas){
                 confirmacao = true;
-                entrou = false;
 
                 if(!tipos.empty()){  // filtro tipos
                     for(Filme* filme: cinema.getFilmes_exibicao()){
-                        if((filme == nullptr || !buscaString(tipos, filme->getTitleType()))){
+                        if(filme == nullptr || !buscaString(tipos, filme->getTitleType())){
                             confirmacao = false;
-                            entrou = true;
-                            // break;
+                            continue;
                         }
-                        else if(entrou){
+                        if(buscaString(tipos, filme->getTitleType())){
                             confirmacao = true;
+                            break;
                         }
                     }
                 }
@@ -87,8 +85,12 @@ class FiltroTeste {
                 // if(!generos.empty()){
                 //     for(Filme* filme: cinema.getFilmes_exibicao()){
                 //         for(string genero: generos){
-                //             if(filme != nullptr && !buscaString(filme->getGenres(), genero)){
+                //             if(filme != nullptr || !buscaString(filme->getGenres(), genero)){
                 //                 confirmacao = false;
+                //                 continue;
+                //             }
+                //             if(buscaString(filme->getGenres(), genero)){
+                //                 confirmacao = true;
                 //                 break;
                 //             }
                 //         }
