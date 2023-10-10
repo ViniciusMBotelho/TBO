@@ -5,6 +5,7 @@
 #include<sstream>
 #include<chrono>
 #include<algorithm>
+#include <cmath>
 #include"Filme.hpp"
 #include"Cinema.hpp"
 #define HASH_CONST 100

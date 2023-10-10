@@ -149,13 +149,13 @@ int main(){
     vector<string> generosBusca;
     // vector<int> limiteDuracoes = {-2,-2};  // nem faz sentido isso dar seg Fault
     // vector<int> limiteAnos = {2000, 2008};
-    int duraInf = 30;
-    int duraSup = 60;
-    int anoInf = 2000;
-    int anoSup = 2010;
+    int duraInf = -2;
+    int duraSup = -2;
+    int anoInf = -2;
+    int anoSup = 2018;
     generosBusca.clear();
-    generosBusca = {"Drama"};
-    string tiposBusca = "tvMiniSeries";
+    generosBusca = {"Reality-TV"};
+    string tiposBusca = "tvEpisode";
 
     FiltroTeste::buscaFilme(filmes,filmesFiltro,tiposBusca,duraInf,duraSup,generosBusca, anoInf, anoSup);
 
@@ -166,18 +166,18 @@ int main(){
     vector<Cinema> cinemasFiltro;
     vector<string> tiposBuscaCinema;
     vector<string> generosBuscaCinema;
-    vector<int> limiteDuracoesCinema = {-2,-2};
-    vector<int> limiteAnosCinema = {-2,-2};
-    int distancia;
-    float preco;
+    vector<int> limiteDuracoesCinema = {-2, -2};
+    vector<int> limiteAnosCinema = {-2, 2018};
+    int distancia = -2;
+    float preco = -2;
     tiposBuscaCinema.clear();
     generosBuscaCinema.clear();
     tiposBuscaCinema = {"tvEpisode"};
-    generosBuscaCinema = {"Action"};
+    generosBuscaCinema = {"Reality-TV"};
     
     FiltroTeste::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
 
-    // imprimeCinemas(cinemasFiltro);
+    imprimeCinemas(cinemasFiltro);
 
 
     //termino da contagem do tempo do programa
@@ -192,7 +192,7 @@ void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]){
 
     for(vector<Filme> filmeHash : filmes){
         for(Filme filme : filmeHash){
-            std::cout << filme.getTconst()<<" ";
+            std::cout << "tt" << filme.getTconst()<<" ";
             std::cout << filme.getTitleType()<<" ";
             std::cout << filme.getPrimaryTitle()<<" ";
             std::cout << filme.getOriginalTitle()<<" ";
@@ -207,6 +207,7 @@ void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]){
             std::cout << endl;
         }
     }
+    cout << endl;
 }
 
 void imprimeCinemas(vector<Cinema> (&cinemas)){
@@ -223,6 +224,7 @@ void imprimeCinemas(vector<Cinema> (&cinemas)){
         }
         std::cout<<endl;
     }
+    cout << endl;
 }
 
 string removeSpace(string str, int quant){  // apaga o primeiro caracter (espaço em branco)

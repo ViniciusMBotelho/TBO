@@ -1,5 +1,6 @@
 #include"Util.hpp"
 
+
 class FiltroTeste {
     public:
         static void buscaFilme(vector<Filme> (&filmes)[HASH_CONST], vector<Filme> (&filmesFiltro)[HASH_CONST], string tipo, int duraInf, int duraSup, vector<string> generos, int anoInf, int anoSup){
@@ -63,40 +64,89 @@ class FiltroTeste {
 
         static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, vector<int> limitesDuracoes, int distancia, float preco, vector<int>limiteAnos){
 
-            bool confirmacao;;
+            bool confirmacao;
 
             for(Cinema cinema: cinemas){
                 confirmacao = true;
+                
+                // filtro de distância
+                if(distancia != -2){
+                    int distanciaCinema =  sqrt(pow((cinema.getCord_x()), 2) + pow((cinema.getCord_y()), 2));
+                    if(distanciaCinema > distancia){
+                        confirmacao = false;
+                        continue;
+                    }
+                }
 
-                if(!tipos.empty()){  // filtro tipos
-                    for(Filme* filme: cinema.getFilmes_exibicao()){
-                        if(filme == nullptr || !buscaString(tipos, filme->getTitleType())){
+                // filtro de preco
+                if(preco != -2){
+                    if(cinema.getPreco() > preco){
+                        confirmacao = false;
+                        continue;
+                    }
+                }
+
+                // verifica se algum filtro relacionado a filme é usado, caso não, pula
+                if(tipos.empty() && generos.empty() && (limitesDuracoes[0] == -2 && limitesDuracoes[1] == -2) && (limiteAnos[0] == -2 && limiteAnos[1] == -2))
+                    continue;
+
+                for(Filme* filmeRef: cinema.getFilmes_exibicao()){
+                    if(filmeRef != nullptr){
+
+                        // filtro de tipos
+                        if(!tipos.empty() && !buscaString(tipos, filmeRef->getTitleType())){
                             confirmacao = false;
                             continue;
                         }
-                        if(buscaString(tipos, filme->getTitleType())){
+                        else if(buscaString(tipos, filmeRef->getTitleType())){
                             confirmacao = true;
-                            break;
                         }
-                    }
-                }
 
-                // action, drama
-                if(!generos.empty()){
-                    for(Filme* filme: cinema.getFilmes_exibicao()){
-                        for(string genero: generos){
-                            if(filme == nullptr || !buscaString(filme->getGenres(), genero)){
+                        // filtro de generos
+                        if(!generos.empty()){
+                            for(string genero: generos){
+                                if(!buscaString(filmeRef->getGenres(), genero)){
+                                    confirmacao = false;
+                                    continue;
+                                }
+                                else{
+                                    confirmacao = true;
+                                }
+                            }
+                        }
+
+                        // filtro de duração
+                        if(limitesDuracoes[0] != -2 && limitesDuracoes[1] != -2){
+                            if((limitesDuracoes[0] > filmeRef->getRuntimeMinutes() || limitesDuracoes[1] < filmeRef->getRuntimeMinutes())){
                                 confirmacao = false;
                                 continue;
                             }
-                            else{
-                                confirmacao = true;
-                                break;
-                            }
                         }
+
+                        // filtro de anos
+                        if(limiteAnos[0] != -2 && limiteAnos[1] != -2){
+                            if(filmeRef->getStartYear() != -1 && filmeRef->getEndYear() != -1)
+                                if(!(filmeRef->getStartYear() > limiteAnos[0] && filmeRef->getEndYear() < limiteAnos[1])){
+                                    confirmacao = false;
+                                    continue;
+                                }
+                            if(filmeRef->getStartYear() == -1)
+                                if(!(limiteAnos[0] < filmeRef->getEndYear() && limiteAnos[1] > filmeRef->getEndYear())){
+                                    confirmacao = false;
+                                    continue;
+                                }
+                            if(filmeRef->getEndYear() == -1)
+                                if(!(limiteAnos[0] < filmeRef->getStartYear() && limiteAnos[1] > filmeRef->getStartYear())){
+                                    confirmacao = false;
+                                    continue;
+                                }
+                        }
+
+                    }
+                    else{
+                        confirmacao = false;
                     }
                 }
-
 
                 if(confirmacao){ //verifica se o cinema atual atende os filtros
                     cinemasFiltro.push_back(cinema);
