@@ -8,7 +8,7 @@
 #include <cmath>
 #include"Filme.hpp"
 #include"Cinema.hpp"
-#define HASH_CONST 100
+#define HASH_CONST 50
 
 class Util{
   public:
