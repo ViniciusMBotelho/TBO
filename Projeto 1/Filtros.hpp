@@ -62,8 +62,6 @@ class Filtros {
 
 
         static void buscaCinema(vector<Cinema> (&cinemas), vector<Cinema> (&cinemasFiltro), vector<string> tipos, vector<string> generos, vector<int> limitesDuracoes, int distancia, float preco, vector<int>limiteAnos){
-
-
             bool confirmacao;
 
             for(Cinema cinema: cinemas){
