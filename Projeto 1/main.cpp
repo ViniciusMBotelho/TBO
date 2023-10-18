@@ -313,7 +313,6 @@ int main(){
             system("clear");
 
             auto startFiltroCinemas = chrono::high_resolution_clock::now();
-
             Filtros::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
             
             auto endFiltroCinemas = chrono::high_resolution_clock::now();
