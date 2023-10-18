@@ -5,6 +5,7 @@ using namespace std;
 void imprimeFilmes(vector<Filme> (&filmes)[HASH_CONST]);
 void imprimeCinemas(vector<Cinema> (&cinemas));
 void escreveFilmes(vector<Filme> (&filmes)[HASH_CONST]);
+void escreveCinemas(vector<Cinema> cinemas);
 string removeSpace(string str, int quant);
 
 // criar menu
@@ -312,6 +313,15 @@ int main(){
 
             system("clear");
 
+            cout << "Deseja buscar cinemas por distância? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
+            cin >> resposta;
+            if(resposta != 2){
+                cout << "Informe a distância máxima: ";
+                cin >> distancia;
+            }
+
+            system("clear");
+
             auto startFiltroCinemas = chrono::high_resolution_clock::now();
             Filtros::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
             
@@ -319,7 +329,13 @@ int main(){
             auto durationFiltroCinemas = chrono::duration_cast<chrono::milliseconds>(endFiltroCinemas - startFiltroCinemas);
             std::cout << "Tempo de filtro cinemas: " << durationFiltroCinemas.count() << " milissegundos" << endl << endl;
             
-            imprimeCinemas(cinemasFiltro);
+            cout << "Deseja salvar o resultado da busca?" << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
+            cin >> resposta;
+
+            if(resposta==1) 
+                escreveCinemas(cinemasFiltro);
+            else 
+                imprimeCinemas(cinemasFiltro);
 
             break;
         }
@@ -404,6 +420,29 @@ void escreveFilmes(vector<Filme> (&filmes)[HASH_CONST]){ //escreve o resultado d
             resultado << "\n";
         }
     }
+    cout << endl;
+}
+
+void escreveCinemas(vector<Cinema> cinemas){
+    std::ofstream resultado("resultadoCinemas.txt", std::ofstream::trunc);
+
+    if(!resultado.is_open()) 
+        cout << "Nao aberto" << endl;
+
+    for(Cinema cinema : cinemas){
+        resultado << cinema.getCinema_id()<<" ";
+        resultado << cinema.getNome()<<" ";
+        resultado << cinema.getCord_x()<<" ";
+        resultado << cinema.getCord_y()<<" ";
+        resultado << cinema.getPreco()<<" ";
+
+        for(Filme* filmeExibicao: cinema.getFilmes_exibicao()){
+            if(filmeExibicao != nullptr)
+                resultado << "tt" <<filmeExibicao->getTconst() << " ";
+        }
+        resultado << "\n";
+    }
+    
     cout << endl;
 }
 
