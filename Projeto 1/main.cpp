@@ -245,7 +245,7 @@ int main(){
 
             break;
         }
-        
+
         case 2:{
             vector<Cinema> cinemasFiltro;
             vector<string> tiposBuscaCinema;

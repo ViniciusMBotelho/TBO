@@ -69,7 +69,7 @@ class Filtros {
                 
                 // filtro de distância
                 if(distancia != -2){
-                    int distanciaCinema =  sqrt(pow((cinema.getCord_x()), 2) + pow((cinema.getCord_y()), 2));
+                    float distanciaCinema =  sqrt(pow((cinema.getCord_x()), 2) + pow((cinema.getCord_y()), 2));
                     if(distanciaCinema > distancia){
                         confirmacao = false;
                         continue;
@@ -84,64 +84,66 @@ class Filtros {
                     }
                 }
 
-                for(Filme* filmeRef: cinema.getFilmes_exibicao()){
-                    if(filmeRef != nullptr){
+                if(!(tipos.empty() && generos.empty() && (limitesDuracoes[0] == -2 && limitesDuracoes[1] == -2) && (limiteAnos[0] == -2 && limiteAnos[1] == -2))){
 
-                        // filtro de tipos
-                        if(!tipos.empty() && !buscaString(tipos, filmeRef->getTitleType())){
-                            confirmacao = false;
-                            continue;
-                        }
-                        else if(buscaString(tipos, filmeRef->getTitleType())){
-                            confirmacao = true;
-                        }
+                    for(Filme* filmeRef: cinema.getFilmes_exibicao()){
+                        if(filmeRef != nullptr){
 
-                        // filtro de generos
-                        if(!generos.empty()){
-                            for(string genero: generos){
-                                if(!buscaString(filmeRef->getGenres(), genero)){
-                                    confirmacao = false;
-                                    continue;
-                                }
-                                else{
-                                    confirmacao = true;
-                                }
-                            }
-                        }
-
-                        // filtro de duração
-                        if(limitesDuracoes[0] != -2 && limitesDuracoes[1] != -2){
-                            if((limitesDuracoes[0] > filmeRef->getRuntimeMinutes() || limitesDuracoes[1] < filmeRef->getRuntimeMinutes())){
+                            // filtro de tipos
+                            if(!tipos.empty() && !buscaString(tipos, filmeRef->getTitleType())){
                                 confirmacao = false;
                                 continue;
                             }
-                        }
+                            else if(buscaString(tipos, filmeRef->getTitleType())){
+                                confirmacao = true;
+                            }
 
-                        // filtro de anos
-                        if(limiteAnos[0] != -2 && limiteAnos[1] != -2){
-                            if(filmeRef->getStartYear() != -1 && filmeRef->getEndYear() != -1)
-                                if(!(filmeRef->getStartYear() > limiteAnos[0] && filmeRef->getEndYear() < limiteAnos[1])){
-                                    confirmacao = false;
-                                    continue;
+                            // filtro de generos
+                            if(!generos.empty()){
+                                for(string genero: generos){
+                                    if(!buscaString(filmeRef->getGenres(), genero)){
+                                        confirmacao = false;
+                                        continue;
+                                    }
+                                    else{
+                                        confirmacao = true;
+                                    }
                                 }
-                            if(filmeRef->getStartYear() == -1)
-                                if(!(limiteAnos[0] < filmeRef->getEndYear() && limiteAnos[1] > filmeRef->getEndYear())){
-                                    confirmacao = false;
-                                    continue;
-                                }
-                            if(filmeRef->getEndYear() == -1)
-                                if(!(limiteAnos[0] < filmeRef->getStartYear() && limiteAnos[1] > filmeRef->getStartYear())){
-                                    confirmacao = false;
-                                    continue;
-                                }
-                        }
+                            }
 
-                    }
-                    else{
-                        confirmacao = false;
+                            // filtro de duração
+                            if(limitesDuracoes[0] != -2 && limitesDuracoes[1] != -2){
+                                if((limitesDuracoes[0] > filmeRef->getRuntimeMinutes() || limitesDuracoes[1] < filmeRef->getRuntimeMinutes())){
+                                    confirmacao = false;
+                                    continue;
+                                }
+                            }
+
+                            // filtro de anos
+                            if(limiteAnos[0] != -2 && limiteAnos[1] != -2){
+                                if(filmeRef->getStartYear() != -1 && filmeRef->getEndYear() != -1)
+                                    if(!(filmeRef->getStartYear() > limiteAnos[0] && filmeRef->getEndYear() < limiteAnos[1])){
+                                        confirmacao = false;
+                                        continue;
+                                    }
+                                if(filmeRef->getStartYear() == -1)
+                                    if(!(limiteAnos[0] < filmeRef->getEndYear() && limiteAnos[1] > filmeRef->getEndYear())){
+                                        confirmacao = false;
+                                        continue;
+                                    }
+                                if(filmeRef->getEndYear() == -1)
+                                    if(!(limiteAnos[0] < filmeRef->getStartYear() && limiteAnos[1] > filmeRef->getStartYear())){
+                                        confirmacao = false;
+                                        continue;
+                                    }
+                            }
+                        }
+                        else{
+                            confirmacao = false;
+                        }
                     }
                 }
-
+                
                 if(confirmacao){ //verifica se o cinema atual atende os filtros
                     cinemasFiltro.push_back(cinema);
                 }
