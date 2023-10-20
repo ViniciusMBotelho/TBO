@@ -85,7 +85,6 @@ class Filtros {
                 }
 
                 if(!(tipos.empty() && generos.empty() && (limitesDuracoes[0] == -2 && limitesDuracoes[1] == -2) && (limiteAnos[0] == -2 && limiteAnos[1] == -2))){
-
                     for(Filme* filmeRef: cinema.getFilmes_exibicao()){
                         if(filmeRef != nullptr){
 

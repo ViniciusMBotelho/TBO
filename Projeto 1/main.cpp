@@ -8,12 +8,11 @@ void escreveFilmes(vector<Filme> (&filmes)[HASH_CONST]);
 void escreveCinemas(vector<Cinema> cinemas);
 string removeSpace(string str, int quant);
 
-// criar menu
-
 int main(){
     //inicio da contagem do tempo do programa
     auto start = chrono::high_resolution_clock::now();
     
+    //***********LEITURAS***********
     //***********FILMES*********** 
     vector<Filme> filmes[HASH_CONST];
     string coluna;
@@ -186,8 +185,6 @@ int main(){
                 cin >> tiposBusca;
             }
 
-            system("clear");
-
             cout << "Deseja buscar por ano? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if(resposta != 2){
@@ -200,8 +197,6 @@ int main(){
                 }while(anoInf > anoSup);
             }
 
-            system("clear");
-
             cout << "Deseja buscar por duração? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if(resposta != 2){
@@ -213,8 +208,6 @@ int main(){
                     if(duraInf > duraSup) cout << "O intervalo de inicio nao pode ser maior que o de termino!" << endl;
                 }while(duraInf > duraSup);
             }
-
-            system("clear");
 
             cout << "Deseja buscar por genero? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
@@ -245,7 +238,7 @@ int main(){
 
             break;
         }
-
+        
         case 2:{
             vector<Cinema> cinemasFiltro;
             vector<string> tiposBuscaCinema;
@@ -260,7 +253,7 @@ int main(){
             int resposta,quantAux;
             string stringAux;
 
-            cout << "Deseja buscar filmes por tipo? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
+            cout << "Deseja buscar cinemas com filmes por tipo específico? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if (resposta != 2){
                 cout << "Quantos tipos deseja incluir no filtro? ";
@@ -273,9 +266,7 @@ int main(){
                 }  
             }
 
-            system("clear");
-
-            cout << "Deseja buscar filmes por genero? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
+            cout << "Deseja buscar cinemas com filmes por genero específico? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if (resposta != 2){
                 cout << "Quantos generos deseja incluir no filtro? ";
@@ -288,9 +279,7 @@ int main(){
                 }  
             }
 
-            system("clear");
-
-            cout << "Deseja buscar por duração? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
+            cout << "Deseja buscar cinemas com filmes por duração específica? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if(resposta != 2){
                 cout << "Informe o inicio do intervalo em minutos: ";
@@ -301,8 +290,6 @@ int main(){
                     if(limiteDuracoesCinema[0] > limiteDuracoesCinema[1]) cout << "O intervalo de inicio nao pode ser maior que o de termino!" << endl;
                 }while(limiteDuracoesCinema[0] > limiteDuracoesCinema[1]);
             }
-
-            system("clear");
             
             cout << "Deseja buscar cinemas por preço? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
@@ -311,16 +298,12 @@ int main(){
                 cin >> preco;
             }
 
-            system("clear");
-
             cout << "Deseja buscar cinemas por distância? " << endl << endl << "1 - Sim" << endl << "2 - Não" << endl << endl << "resposta: ";
             cin >> resposta;
             if(resposta != 2){
                 cout << "Informe a distância máxima: ";
                 cin >> distancia;
             }
-
-            system("clear");
 
             auto startFiltroCinemas = chrono::high_resolution_clock::now();
             Filtros::buscaCinema(cinemas, cinemasFiltro, tiposBuscaCinema, generosBuscaCinema, limiteDuracoesCinema, distancia, preco, limiteAnosCinema);
@@ -399,7 +382,7 @@ void imprimeCinemas(vector<Cinema> (&cinemas)){
 }
 
 void escreveFilmes(vector<Filme> (&filmes)[HASH_CONST]){ //escreve o resultado da busca em um arquivo txt
-     std::ofstream resultado("resultado.txt", std::ofstream::trunc);
+     std::ofstream resultado("resultadoFilmes.txt", std::ofstream::trunc);
 
     if(!resultado.is_open()) 
         cout << "Nao aberto" << endl;
