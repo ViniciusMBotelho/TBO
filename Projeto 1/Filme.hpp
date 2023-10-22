@@ -15,7 +15,6 @@ class Filme{
         int runtimeMinutes;
         int hash;
         vector<string> genres;
-        vector<string> cinema_id;
 
     public:
         int getTconst()
@@ -106,16 +105,6 @@ class Filme{
         void setGenres(string generoA)
         {
             genres.push_back(generoA);
-        }
-
-        vector<string> getCinema_id()
-        {
-            return cinema_id;
-        }
-
-        void setCinema_id(string cinema_idA)
-        {
-            cinema_id.push_back(cinema_idA);
         }
 
         int getHash()
