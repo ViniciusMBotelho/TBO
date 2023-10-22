@@ -15,6 +15,7 @@ class Filme{
         int runtimeMinutes;
         int hash;
         vector<string> genres;
+        vector<string> cinema_id;
 
     public:
         int getTconst()
