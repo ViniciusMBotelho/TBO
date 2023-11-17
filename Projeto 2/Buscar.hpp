@@ -3,13 +3,13 @@
 #include <vector>
 #include <string>
 
+const int MAXC = 128;  // Considera todos os caracteres ASCI
+
 using namespace std;
 
-const int MAXS = 500;
-const int MAXC = 26;
-int out[MAXS];
-int f[MAXS];
-int g[MAXS][MAXC];
+int g[MAXC][MAXC];  // Transições do Aho-Corasick
+int f[MAXC];        // Função de falha
+int out[MAXC];       // Máscara de saída
 
 class Buscar{
     private:
@@ -37,28 +37,24 @@ class Buscar{
             return lps;
         }
 
-        static int buildMatchingMachine(string arr[], int k)
-        {
+        static void addPattern(const string& pattern, int patternIndex) {
+            int currentState = 0;
+
+            for (char ch : pattern) {
+                if (g[currentState][ch] == -1)
+                    g[currentState][ch] = currentState = g[currentState][ch] = currentState++;
+            }
+            out[currentState] |= (1 << patternIndex);
+        }   
+
+        static void buildMatchingMachine(const vector<string>& patterns) {
             memset(out, 0, sizeof out);
             memset(g, -1, sizeof g);
 
             int states = 1;
 
-            for (int i = 0; i < k; ++i)
-            {
-                const string &word = arr[i];
-                int currentState = 0;
-
-                for (int j = 0; j < word.size(); ++j)
-                {
-                    int ch = word[j] - 'a';
-
-                    if (g[currentState][ch] == -1)
-                        g[currentState][ch] = states++;
-
-                    currentState = g[currentState][ch];
-                }
-                out[currentState] |= (1 << i);
+            for (int i = 0; i < patterns.size(); ++i) {
+                addPattern(patterns[i], i);
             }
 
             for (int ch = 0; ch < MAXC; ++ch)
@@ -68,49 +64,55 @@ class Buscar{
             memset(f, -1, sizeof f);
             queue<int> q;
 
-            for (int ch = 0; ch < MAXC; ++ch)
-            {
-                if (g[0][ch] != 0)
-                {
+            for (int ch = 0; ch < MAXC; ++ch) {
+                if (g[0][ch] != 0) {
                     f[g[0][ch]] = 0;
                     q.push(g[0][ch]);
                 }
             }
-            while (q.size())
-            {
+
+            while (!q.empty()) {
                 int state = q.front();
                 q.pop();
-                for (int ch = 0; ch <= MAXC; ++ch)
-                {
-                    if (g[state][ch] != -1)
-                    {
+
+                for (int ch = 0; ch < MAXC; ++ch) {
+                    if (g[state][ch] != -1) {
                         int failure = f[state];
                         while (g[failure][ch] == -1)
                             failure = f[failure];
 
                         failure = g[failure][ch];
                         f[g[state][ch]] = failure;
-
-                        
                         out[g[state][ch]] |= out[failure];
-
-                        
                         q.push(g[state][ch]);
                     }
                 }
             }
-
-            return states;
         }
 
-        static int findNextState(int currentState, char nextInput)
-        {
+        static int findNextState(int currentState, char nextInput) {
+        // Implementação da função findNextState
             int answer = currentState;
-            int ch = nextInput - 'a';
 
-            while (g[answer][ch] == -1)
-                answer = f[answer];
-            return g[answer][ch];
+            // Ignora espaços em branco
+            if (nextInput != ' ') {
+                int ch;
+                if (nextInput >= 0 && nextInput <= 127) {
+                    ch = nextInput;  // Considera todos os caracteres ASCII
+                } else {
+                    // Lida com outros caracteres especiais ou fora do intervalo ASCII, se necessário
+                    ch = 128;  // Ajuste conforme necessário
+                }
+
+                while (g[answer][ch] == -1) {
+                    // Se o próximo estado não for encontrado, vá para o estado de falha
+                    answer = f[answer];
+                }
+
+                answer = g[answer][ch];
+            }
+
+            return answer;
         }
 
     public:
@@ -175,23 +177,20 @@ class Buscar{
             return -1;
         }
 
-        static void buscaPalavras(string arr[], int k, string text){
+        static void buscarPalavras(const string& text, const vector<string>& patterns) {
+            buildMatchingMachine(patterns);
 
-            vector<int> idxs;
-
-            buildMatchingMachine(arr, k);
             int currentState = 0;
 
-            for (int i = 0; i < text.size(); ++i)
-            {
+            for (int i = 0; i < text.size(); ++i) {
                 currentState = findNextState(currentState, text[i]);
+
                 if (out[currentState] == 0)
                     continue;
-                for (int j = 0; j < k; ++j)
-                {
-                    if (out[currentState] & (1 << j))
-                    {
-                        cout << "Palavra " << arr[j] << " appears from " << i - arr[j].size() + 1 << "to " << i << endl;
+
+                for (int j = 0; j < patterns.size(); ++j) {
+                    if (out[currentState] & (1 << j)) {
+                        cout << "Padrão \"" << patterns[j] << "\" encontrado na posição " << i - patterns[j].size() + 1 << endl;
                     }
                 }
             }
