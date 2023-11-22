@@ -2,6 +2,7 @@
 #include <map>
 #include <iostream>
 #include <cctype>
+#include <cwctype>
 #include"Buscar.hpp"
 #include"aho.hpp"
 
@@ -10,6 +11,7 @@ void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vec
 void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void imprimeMapa(map<char, vector<int>> patternIdx);
+bool isNumeric(const string& str);
 
 int main() {
 
@@ -65,7 +67,7 @@ void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vec
     for(auto& par: patternIdx){
         switch (par.first){
         case '@':
-            verifyEmail(text, par.second, patternsFound);  // retornar (referência) um map<char, vector<string>> (@: "alo@gmail.com", ...)
+            // verifyEmail(text, par.second, patternsFound);  // retornar (referência) um map<char, vector<string>> (@: "alo@gmail.com", ...)
             break;
         case '(':
             verifyPhone(text, par.second, patternsFound);
@@ -84,7 +86,7 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
         3) buscar .com ou .com.br e um espaço no final;  (pegar o idxFinal)
         4) substring idxInicial - idxFianl e colocar em patternsFound
     */
-    
+   
     string emailPiece;
 
     if (!idxs.empty()) {
@@ -113,7 +115,6 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
                 confirmation = false;
                 continue;
             }
-
             if(text.substr((idx+domain+2), 4) == "com ")  // adiciona a string
                 emailPiece.append(".com");
             else if (text.substr((idx+domain+2), 7) == "com.br ")
@@ -127,6 +128,33 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
 
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound){
 
+
+    if(!idxs.empty()){
+        bool confirmation = true;
+        text.substr(1,2);
+        for(int idx: idxs){
+            
+            confirmation = true;
+            if(!isNumeric(text.substr(idx+1, 2))){
+                confirmation = false;
+                continue;
+            }
+            if(text.substr(idx+3, 2) != ") "){
+                confirmation = false;
+                continue;
+            }
+            if(isNumeric(text.substr(idx+5, 5))){
+                cout << text.substr(idx+5, 5) << endl;
+                continue;
+            }
+            cout << text[idx+12] << endl;
+            if(text[idx+12] == '-'){
+                confirmation = false;
+                cout << text[idx+10] << endl;
+                continue;
+            }
+        }
+    }
 }
 
 void imprimeMapa(map<char, vector<int>> patternIdx){
@@ -137,4 +165,13 @@ void imprimeMapa(map<char, vector<int>> patternIdx){
             cout << idx << " ";
         cout << endl;
     }
+}
+
+bool isNumeric(const string& str) {
+    for (char ch : str) {
+        if (!isdigit(ch)) {
+            return false;
+        }
+    }
+    return true;
 }
