@@ -10,6 +10,7 @@ string leArquivo(string filePath);
 void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vector<string>> &patternsFound);
 void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
+void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
 
@@ -67,13 +68,13 @@ void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vec
     for(auto& par: patternIdx){
         switch (par.first){
         case '@':
-            // verifyEmail(text, par.second, patternsFound);  // retornar (referência) um map<char, vector<string>> (@: "alo@gmail.com", ...)
+            verifyEmail(text, par.second, patternsFound);  // retornar (referência) um map<char, vector<string>> (@: "alo@gmail.com", ...)
             break;
         case '(':
             verifyPhone(text, par.second, patternsFound);
             break;
         case '/':
-            // verifyDate();
+            verifyDate(text, par.second, patternsFound);
             break;
         }
     }
@@ -94,7 +95,8 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
         for(int idx: idxs){ 
             
             confirmation = true;
-                
+
+            // se possível trocar o tamanho pré '@' e tranformar inteiros em const
             if(text.substr((idx-14), 14).find_last_of(" ") == 13 || text.substr((idx-14), 14).find_last_of(" ") == string::npos){  // verifica credencial do email
                 confirmation = false;
                 continue;
@@ -128,12 +130,10 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
 
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound){
 
-
     if(!idxs.empty()){
         bool confirmation = true;
-        text.substr(1,2);
         for(int idx: idxs){
-            
+
             confirmation = true;
             if(!isNumeric(text.substr(idx+1, 2))){
                 confirmation = false;
@@ -143,16 +143,53 @@ void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patte
                 confirmation = false;
                 continue;
             }
-            if(isNumeric(text.substr(idx+5, 5))){
-                cout << text.substr(idx+5, 5) << endl;
-                continue;
-            }
-            cout << text[idx+12] << endl;
-            if(text[idx+12] == '-'){
+                
+            if(!isNumeric(text.substr(idx+5, 5))){
                 confirmation = false;
-                cout << text[idx+10] << endl;
                 continue;
             }
+
+            if(text[idx+10] != '-'){
+                confirmation = false;
+                continue;
+            }
+
+            if(!isNumeric(text.substr(idx+11, 4))){
+                confirmation = false;
+                continue;
+            }
+
+            if(confirmation)
+                patternsFound['('].push_back(text.substr(idx, 15));
+        }
+    }
+}
+
+void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound){
+    if(!idxs.empty()){
+        bool confirmation = true;
+        for(int idx: idxs){
+
+            confirmation = true;
+            if(!isNumeric(text.substr(idx-2,2))){
+                confirmation = false;
+                continue;
+            }
+
+            if(!isNumeric(text.substr(idx+1,2))){
+                confirmation = false;
+                continue;
+            }
+
+            if(isNumeric(text.substr(idx+4,4))){
+                confirmation = false;
+                continue;
+            }
+
+            if(confirmation){
+                patternsFound['/'].push_back(text.substr(idx-2, 10));
+                continue;
+            }      
         }
     }
 }
