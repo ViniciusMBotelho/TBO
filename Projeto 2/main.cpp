@@ -25,7 +25,6 @@ int main() {
     //     cout << "idx: " << idx << '\n';
 
 
-
     Aho ahotrie {};
     string text = leArquivo("dados/emails.txt");  // le o arquivo e joga para uma string
     vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
@@ -154,7 +153,7 @@ void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patte
                 continue;
             }
 
-            if(!isNumeric(text.substr(idx+11, 4))){
+            if(!isNumeric(text.substr(idx+11, 4)) || isdigit(text[idx+15])){
                 confirmation = false;
                 continue;
             }
@@ -165,13 +164,21 @@ void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patte
     }
 }
 
+
+// 12/32/2002
 void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound){
     if(!idxs.empty()){
         bool confirmation = true;
         for(int idx: idxs){
 
             confirmation = true;
+            
             if(!isNumeric(text.substr(idx-2,2))){
+                confirmation = false;
+                continue;
+            }
+
+            if(stoi(text.substr(idx-2,2)) > 31){
                 confirmation = false;
                 continue;
             }
@@ -180,8 +187,18 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
                 confirmation = false;
                 continue;
             }
+            
+            if(stoi(text.substr(idx+1,2)) > 12){
+                confirmation = false;
+                continue;
+            }
 
-            if(isNumeric(text.substr(idx+4,4))){
+            if(!isNumeric(text.substr(idx+4,4))) {
+                confirmation = false;
+                continue;
+            }
+
+            if(isblank(text[idx+8] == 0) || text[idx+8] == '\n'){
                 confirmation = false;
                 continue;
             }
