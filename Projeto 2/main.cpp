@@ -6,13 +6,42 @@
 #include"Buscar.hpp"
 #include"aho.hpp"
 
-string leArquivo(string filePath);
+string fileReader(string filePath);
 void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vector<string>> &patternsFound);
 void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
+void textClassifier(string filePath, map<string, int> &wordCounter);
+
+// bool compare(pair<string, int>& n,pair<string, int>& m)
+//     {
+//       return n.second < m.second;
+//     }
+//    void sort(map<string, int>& M)
+//    {
+
+//     // Declare vector of pairs
+//    vector<pair<string, int> > Ans;
+
+//     // Copy key-value pair from Map
+//    // to vector of pairs
+//       for (auto& i : M) 
+//       {
+//        Ans.push_back(i);
+//       }
+
+//    // Sort using function
+//    sort(Ans.begin(), Ans.end(), compare);
+
+//    // Print the sorted value
+//      for (auto& i : Ans) {
+
+//         cout << i.first << ' '
+//           << i.second << endl;
+//          }
+//    }
 
 int main() {
 
@@ -25,33 +54,49 @@ int main() {
     //     cout << "idx: " << idx << '\n';
 
 
-    Aho ahotrie {};
-    string text = leArquivo("dados/emails.txt");  // le o arquivo e joga para uma string
-    vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
-    map<char, vector<int>> patternIdx;  // indice dos padrões
-    map<char, vector<string>> patternsFound;  // padrões encontrados na string
-
-    patternIdx['@'] = {};
-    patternIdx['('] = {};
-    patternIdx['/'] = {};
+    // DATA MINING
     
-    for (auto& s : patterns)  // aho-korasick
-        ahotrie.add_string(s);
-    ahotrie.prepare();
-    patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
-    
-    verifyPattern(text, patternIdx, patternsFound);
-    // imprimeMapa(patternIdx);
+    // Aho ahotrie {};
+    string filePath = "dados/emails.txt";
+    string text = fileReader(filePath);  // le o arquivo e joga para uma string
+    // vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
+    // map<char, vector<int>> patternIdx;  // indice dos padrões
+    // map<char, vector<string>> patternsFound;  // padrões encontrados na string
 
-    for(const auto& par: patternsFound){
-        cout << "Chave '" << par.first << "' : ";
-        for(string idx: par.second)
-            cout << idx << " | ";
+    // patternIdx['@'] = {};
+    // patternIdx['('] = {};
+    // patternIdx['/'] = {};
+    
+    // for (auto& s : patterns)  // aho-korasick
+    //     ahotrie.add_string(s);
+    // ahotrie.prepare();
+    // patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
+    
+    // verifyPattern(text, patternIdx, patternsFound);
+    // // imprimeMapa(patternIdx);
+
+    // for(const auto& par: patternsFound){
+    //     cout << "Chave '" << par.first << "' : ";
+    //     for(string idx: par.second)
+    //         cout << idx << " | ";
+    //     cout << endl;
+    // }
+
+
+    // CLASSIFICAÇÃO DE TEXTOS
+
+    map<string, int> wordCounter;
+    textClassifier(filePath, wordCounter);
+
+    for(const auto& par: wordCounter){
+        if(par.second < 3) continue;
+        cout << "Chave '" << par.first << "' : " << par.second;
         cout << endl;
     }
+
 }
 
-string leArquivo(string filePath){
+string fileReader(string filePath){
     
     ifstream file(filePath);
     string content((istreambuf_iterator<char>(file)), istreambuf_iterator<char>());  // lê arquivo e converte para string
@@ -164,15 +209,13 @@ void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patte
     }
 }
 
-
-// 12/32/2002
 void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound){
     if(!idxs.empty()){
         bool confirmation = true;
         for(int idx: idxs){
 
             confirmation = true;
-            
+
             if(!isNumeric(text.substr(idx-2,2))){
                 confirmation = false;
                 continue;
@@ -228,4 +271,29 @@ bool isNumeric(const string& str) {
         }
     }
     return true;
+}
+
+void textClassifier(string pathFile, map<string, int> &wordCounter){
+
+    ifstream file;
+    vector<string> textWords;
+    string word;
+    string exceptDict = {"com das dos são que por para têm tem uma que umas uns"};
+
+
+    file.open(pathFile);
+    while(file >> word){
+        word[0] = tolower(word[0]);
+        if(!isalpha(word.back()))
+            word.pop_back();
+        
+
+        if((word.length() < 3) || (Buscar::KMP(exceptDict, word) != -1)) continue;
+
+        if(wordCounter.find(word) == wordCounter.end())
+            wordCounter[word] = 1;
+        
+        else
+            wordCounter[word]++;
+    }
 }
