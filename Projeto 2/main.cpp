@@ -56,31 +56,31 @@ int main() {
 
     // DATA MINING
     
-    // Aho ahotrie {};
+    Aho ahotrie {};
     string filePath = "dados/emails.txt";
     string text = fileReader(filePath);  // le o arquivo e joga para uma string
-    // vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
-    // map<char, vector<int>> patternIdx;  // indice dos padrões
-    // map<char, vector<string>> patternsFound;  // padrões encontrados na string
+    vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
+    map<char, vector<int>> patternIdx;  // indice dos padrões
+    map<char, vector<string>> patternsFound;  // padrões encontrados na string
 
-    // patternIdx['@'] = {};
-    // patternIdx['('] = {};
-    // patternIdx['/'] = {};
+    patternIdx['@'] = {};
+    patternIdx['('] = {};
+    patternIdx['/'] = {};
     
-    // for (auto& s : patterns)  // aho-korasick
-    //     ahotrie.add_string(s);
-    // ahotrie.prepare();
-    // patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
+    for (auto& s : patterns)  // aho-korasick
+        ahotrie.add_string(s);
+    ahotrie.prepare();
+    patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
     
-    // verifyPattern(text, patternIdx, patternsFound);
-    // // imprimeMapa(patternIdx);
+    verifyPattern(text, patternIdx, patternsFound);
+    // imprimeMapa(patternIdx);
 
-    // for(const auto& par: patternsFound){
-    //     cout << "Chave '" << par.first << "' : ";
-    //     for(string idx: par.second)
-    //         cout << idx << " | ";
-    //     cout << endl;
-    // }
+    for(const auto& par: patternsFound){
+        cout << "Chave '" << par.first << "' : ";
+        for(string idx: par.second)
+            cout << idx << " | ";
+        cout << endl;
+    }
 
 
     // CLASSIFICAÇÃO DE TEXTOS
@@ -93,8 +93,8 @@ int main() {
         cout << "Chave '" << par.first << "' : " << par.second;
         cout << endl;
     }
-
 }
+
 
 string fileReader(string filePath){
     
