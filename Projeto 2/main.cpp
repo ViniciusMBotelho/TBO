@@ -3,6 +3,9 @@
 #include <iostream>
 #include <cctype>
 #include <cwctype>
+#include <stdlib.h>
+#include <stdio.h>
+#include <algorithm>
 #include"Buscar.hpp"
 #include"aho.hpp"
 
@@ -14,6 +17,17 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
 void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
 void textClassifier(string filePath, map<string, int> &wordCounter);
+void wordCloud(map<string, int> wordCounter);
+
+int escalarValor(int valor, int menorOriginal, int maiorOriginal) {
+    double m = 255.0 / (maiorOriginal - menorOriginal);
+    double b = -((255*menorOriginal) / (maiorOriginal - menorOriginal));
+
+    // Aplica a função de mapeamento
+    int mappedValue = static_cast<int>(m * valor + b);
+
+    return mappedValue;
+}
 
 // bool compare(pair<string, int>& n,pair<string, int>& m)
 //     {
@@ -90,11 +104,20 @@ int main() {
 
     for(const auto& par: wordCounter){
         if(par.second < 3) continue;
-        cout << "Chave '" << par.first << "' : " << par.second;
-        cout << endl;
+        cout << "Chave '" << "\033[38;2;" << 255 << ";" << escalarValor(par.second, 3, 15) << ";" << escalarValor(par.second, 3, 15) << "m" << par.first  << "\033[0m" << "' : " << par.second;
+        cout << "\033[0m" << endl; 
     }
-}
 
+    // for (int i = 255; i >= 0; --i) {
+    //     // Código de escape ANSI para definir a cor do texto usando RGB de 8 bits
+    //     std::cout << "\033[38;2;" << 255 << ";" << i << ";" << i << "m";
+    //     std::cout << "a";  // Um caractere para cada iteração
+    // }
+
+    // // Código de escape para redefinir as configurações de cor
+    // std::cout << "\033[0m" << std::endl; 
+
+}
 
 string fileReader(string filePath){
     
