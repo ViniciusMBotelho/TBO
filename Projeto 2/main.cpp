@@ -14,6 +14,7 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
 void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
 void textClassifier(string filePath, map<string, int> &wordCounter);
+pair<string, int> mapSort(map<string, int> &wordCounter);
 
 // bool compare(pair<string, int>& n,pair<string, int>& m)
 //     {
@@ -90,9 +91,11 @@ int main() {
 
     for(const auto& par: wordCounter){
         if(par.second < 3) continue;
-        cout << "Chave '" << par.first << "' : " << par.second;
+        cout << "Chave '" << "\x1b[38;2;" << (par.second*25 > 255 ? 255 : par.second*25) << ";0;0m" <<par.first << "\x1b[0m" << "' : " <<par.second;
         cout << endl;
     }
+
+    mapSort(wordCounter);
 }
 
 
@@ -278,7 +281,7 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
     ifstream file;
     vector<string> textWords;
     string word;
-    string exceptDict = {"com das dos são que por para têm tem uma que umas uns"};
+    string exceptDict = {"com das dos são que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};
 
 
     file.open(pathFile);
@@ -296,4 +299,23 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
         else
             wordCounter[word]++;
     }
+}
+
+pair<string, int> mapSort(map<string, int> &wordCounter){
+    pair<string, int> ordPar;
+    
+    vector<pair<string, int>> vecPairs(inputMap.begin(), inputMap.end());
+
+    // Define a lambda function for sorting the vector based on the int values
+    auto comparator = [](const auto& lhs, const auto& rhs) {
+        return lhs.second < rhs.second;
+    };
+
+    // Sort the vector using the comparator
+    sort(vecPairs.begin(), vecPairs.end(), comparator);
+
+    // Return the ordered vector as a pair along with a flag indicating success
+    return make_pair(vecPairs, true);
+
+    return ordPar;
 }
