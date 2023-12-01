@@ -17,17 +17,8 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
 void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
 void textClassifier(string filePath, map<string, int> &wordCounter);
-void wordCloud(map<string, int> wordCounter);
-
-int escalarValor(int valor, int menorOriginal, int maiorOriginal) {
-    double m = 255.0 / (maiorOriginal - menorOriginal);
-    double b = -((255*menorOriginal) / (maiorOriginal - menorOriginal));
-
-    // Aplica a função de mapeamento
-    int mappedValue = static_cast<int>(m * valor + b);
-
-    return mappedValue;
-}
+int colorFunc(int max, int num);
+pair<string, int> mapSort(map<string, int> &wordCounter);
 
 // bool compare(pair<string, int>& n,pair<string, int>& m)
 //     {
@@ -102,22 +93,19 @@ int main() {
     map<string, int> wordCounter;
     textClassifier(filePath, wordCounter);
 
+    auto maxElement = std::max_element(wordCounter.begin(), wordCounter.end(), [](const auto& p1, const auto& p2) {
+            return p1.second < p2.second;
+        });
+
     for(const auto& par: wordCounter){
         if(par.second < 3) continue;
-        cout << "Chave '" << "\033[38;2;" << 255 << ";" << escalarValor(par.second, 3, 15) << ";" << escalarValor(par.second, 3, 15) << "m" << par.first  << "\033[0m" << "' : " << par.second;
-        cout << "\033[0m" << endl; 
+        cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, par.second) << ";0;0m" << par.first << "\x1b[0m" << "' : " << par.second;
+        cout << endl;
     }
 
-    // for (int i = 255; i >= 0; --i) {
-    //     // Código de escape ANSI para definir a cor do texto usando RGB de 8 bits
-    //     std::cout << "\033[38;2;" << 255 << ";" << i << ";" << i << "m";
-    //     std::cout << "a";  // Um caractere para cada iteração
-    // }
-
-    // // Código de escape para redefinir as configurações de cor
-    // std::cout << "\033[0m" << std::endl; 
-
+    // mapSort(wordCounter);
 }
+
 
 string fileReader(string filePath){
     
@@ -301,7 +289,7 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
     ifstream file;
     vector<string> textWords;
     string word;
-    string exceptDict = {"com das dos são que por para têm tem uma que umas uns"};
+    string exceptDict = {"com das dos são que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};
 
 
     file.open(pathFile);
@@ -320,3 +308,27 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
             wordCounter[word]++;
     }
 }
+
+int colorFunc(int max, int num){
+    return (num/(float)max) * 255;
+}
+
+
+// pair<string, int> mapSort(map<string, int> &wordCounter){
+//     pair<string, int> ordPar;
+    
+//     vector<pair<string, int>> vecPairs(inputMap.begin(), inputMap.end());
+
+//     // Define a lambda function for sorting the vector based on the int values
+//     auto comparator = [](const auto& lhs, const auto& rhs) {
+//         return lhs.second < rhs.second;
+//     };
+
+//     // Sort the vector using the comparator
+//     sort(vecPairs.begin(), vecPairs.end(), comparator);
+
+//     // Return the ordered vector as a pair along with a flag indicating success
+//     return make_pair(vecPairs, true);
+
+//     return ordPar;
+// }
