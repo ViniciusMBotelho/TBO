@@ -9,44 +9,20 @@
 #include"Buscar.hpp"
 #include"aho.hpp"
 
+typedef struct {
+    string word;
+    int quant;
+}parStrInt;
+
 string fileReader(string filePath);
 void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vector<string>> &patternsFound);
 void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyPhone(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
 void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patternsFound);
-void imprimeMapa(map<char, vector<int>> patternIdx);
 bool isNumeric(const string& str);
 void textClassifier(string filePath, map<string, int> &wordCounter);
 int colorFunc(int max, int num);
-pair<string, int> mapSort(map<string, int> &wordCounter);
-
-// bool compare(pair<string, int>& n,pair<string, int>& m)
-//     {
-//       return n.second < m.second;
-//     }
-//    void sort(map<string, int>& M)
-//    {
-
-//     // Declare vector of pairs
-//    vector<pair<string, int> > Ans;
-
-//     // Copy key-value pair from Map
-//    // to vector of pairs
-//       for (auto& i : M) 
-//       {
-//        Ans.push_back(i);
-//       }
-
-//    // Sort using function
-//    sort(Ans.begin(), Ans.end(), compare);
-
-//    // Print the sorted value
-//      for (auto& i : Ans) {
-
-//         cout << i.first << ' '
-//           << i.second << endl;
-//          }
-//    }
+void quick(parStrInt wordCounter[], int esq, int dir);
 
 int main() {
 
@@ -71,39 +47,42 @@ int main() {
     patternIdx['@'] = {};
     patternIdx['('] = {};
     patternIdx['/'] = {};
-    
+
     for (auto& s : patterns)  // aho-korasick
         ahotrie.add_string(s);
     ahotrie.prepare();
     patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
     
     verifyPattern(text, patternIdx, patternsFound);
-    // imprimeMapa(patternIdx);
-
-    for(const auto& par: patternsFound){
+    for(const auto& par: patternsFound){  // imprime dados encontrados
         cout << "Chave '" << par.first << "' : ";
         for(string idx: par.second)
             cout << idx << " | ";
         cout << endl;
     }
 
-
-    // CLASSIFICAÇÃO DE TEXTOS
+    // VISUALIZAÇÂO DE DADOS
 
     map<string, int> wordCounter;
+    int i=0;
+    
     textClassifier(filePath, wordCounter);
+    auto maxElement = std::max_element(wordCounter.begin(), wordCounter.end(), [](const auto& p1, const auto& p2) {  // maior elemento do map
+        return p1.second < p2.second;});
 
-    auto maxElement = std::max_element(wordCounter.begin(), wordCounter.end(), [](const auto& p1, const auto& p2) {
-            return p1.second < p2.second;
-        });
-
-    for(const auto& par: wordCounter){
-        if(par.second < 3) continue;
-        cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, par.second) << ";0;0m" << par.first << "\x1b[0m" << "' : " << par.second;
-        cout << endl;
+    parStrInt wordCounterArr[wordCounter.size()];
+    for(const auto& par: wordCounter){  // map para array (string, int)
+        wordCounterArr[i].word = par.first;
+        wordCounterArr[i].quant = par.second;
+        i++;
     }
 
-    // mapSort(wordCounter);
+    quick(wordCounterArr, 0, wordCounter.size()-1);  // ordena o array
+    for(i=0; i<wordCounter.size(); i++){  // imprime relação palavra : quantidade
+        if(wordCounterArr[i].quant < 3) continue;
+        cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, wordCounterArr[i].quant) << ";0;0m" << wordCounterArr[i].word << "\x1b[0m" << "' : " << wordCounterArr[i].quant;
+        cout << endl;
+    }
 }
 
 
@@ -265,16 +244,6 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
     }
 }
 
-void imprimeMapa(map<char, vector<int>> patternIdx){
-    
-    for(const auto& par: patternIdx){
-        cout << "Chave '" << par.first << "' : ";
-        for(int idx: par.second)
-            cout << idx << " ";
-        cout << endl;
-    }
-}
-
 bool isNumeric(const string& str) {
     for (char ch : str) {
         if (!isdigit(ch)) {
@@ -291,21 +260,26 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
     string word;
     string exceptDict = {"com das dos são que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};
 
-
     file.open(pathFile);
     while(file >> word){
         word[0] = tolower(word[0]);
         if(!isalpha(word.back()))
             word.pop_back();
-        
 
+        if(!isalpha(word.at(0)))
+            word.erase(0,1);
+        
         if((word.length() < 3) || (Buscar::KMP(exceptDict, word) != -1)) continue;
 
-        if(wordCounter.find(word) == wordCounter.end())
+        if(wordCounter.find(word) == wordCounter.end()){
             wordCounter[word] = 1;
+            // cout << word << ' ';
+        }
         
-        else
+        else{
             wordCounter[word]++;
+            // cout << word << ' ';
+        }
     }
 }
 
@@ -313,22 +287,27 @@ int colorFunc(int max, int num){
     return (num/(float)max) * 255;
 }
 
+void quick(parStrInt wordCounter[], int esq, int dir) {
+    int pivo = esq, i, j;
+    parStrInt ch;
 
-// pair<string, int> mapSort(map<string, int> &wordCounter){
-//     pair<string, int> ordPar;
-    
-//     vector<pair<string, int>> vecPairs(inputMap.begin(), inputMap.end());
+    for (i = esq + 1; i <= dir; i++) {
+        j = i;
+        if (wordCounter[j].quant > wordCounter[pivo].quant) {
+            ch = wordCounter[j];
+            while (j > pivo) {
+                wordCounter[j] = wordCounter[j - 1];
+                j--;
+            }
+            wordCounter[j] = ch;
+            pivo++;
+        }
+    }
 
-//     // Define a lambda function for sorting the vector based on the int values
-//     auto comparator = [](const auto& lhs, const auto& rhs) {
-//         return lhs.second < rhs.second;
-//     };
+    if (pivo - 1 >= esq)
+        quick(wordCounter, esq, pivo - 1);
 
-//     // Sort the vector using the comparator
-//     sort(vecPairs.begin(), vecPairs.end(), comparator);
+    if (pivo + 1 <= dir)
+        quick(wordCounter, pivo + 1, dir);
+}
 
-//     // Return the ordered vector as a pair along with a flag indicating success
-//     return make_pair(vecPairs, true);
-
-//     return ordPar;
-// }
