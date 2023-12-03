@@ -84,9 +84,9 @@ int main() {
         cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, wordCounterArr[i].quant) << ";0;0m" << wordCounterArr[i].word << "\x1b[0m" << "' : " << wordCounterArr[i].quant;
         cout << endl;
     }
-    size_t wordCounterSize = sizeof(wordCounterArr) / sizeof(wordCounterArr[0]);
-    WordChart::plotGraphPNG(wordCounterArr, wordCounterSize, "word_chart.png");
 
+    size_t wordCounterSize = sizeof(wordCounterArr) / sizeof(wordCounterArr[0]);  // Geração do gráfico
+    WordChart::plotGraphPNG(wordCounterArr, wordCounterSize, "WordGraph.png");
 }
 
 /*Abri um arquivo de texto e retorna em formato de string*/
@@ -130,19 +130,31 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
     */
    
     string emailPiece;  // string auxiliar
+    string aux;
 
     if (!idxs.empty()) {
         bool confirmation = true;
         for(int idx: idxs){ 
             confirmation = true;
 
-            if(text.substr((idx-14), 14).find_last_of(" ") == 13 || text.substr((idx-14), 14).find_last_of(" ") == string::npos){  // verifica credencial do email
-                confirmation = false;
-                continue;
+            //PRIMEIRA VERIFICAÇÂO ------ CREDENCIAL
+            aux.clear();
+            int j = idx-1;
+            while((j > idx-15) && isalnum(text[j])){  // pega a primeira parte do email
+                aux = aux + text[j];
+                j--;
             }
-            string candidato = text.substr((idx-14), 14);
-            emailPiece = candidato.substr(candidato.find_last_of(" ") + 1, idx - candidato.find_last_of(" "));  // adiciona a string
 
+            if(!aux.empty()){  // inverte string para o original
+                reverse(aux.begin(), aux.end());
+            }else continue;
+
+            if(isalnum(aux[j-1])) continue;  // verifica se o caracter antes do 15º é alfanumerico, se for a credencial é invalida
+
+            string candidato = aux;
+            emailPiece = candidato;
+
+            //SEGUNDA VERIFICAÇÂO ------ DOMINIO
             if(text.substr((idx), 10).find_first_of(".") == string::npos || 
             (text.substr((idx), 10).find_first_of(' ') != string::npos || !isalpha(text[idx+1]))){  // verifica dominio
                 confirmation = false;
@@ -151,15 +163,22 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
             candidato = text.substr(idx, 10);
             emailPiece.append(candidato.substr(0, candidato.find_first_of(".")));  // adiciona a string
             
+            //TERCEIRA VERIFICAÇÂO ------ FINAL DE DOMINIO
             int domain = text.substr((idx), 10).find_first_of(".") - 1;
-            if((text.substr((idx+domain+2), 4) != "com " && text.substr((idx+domain+2), 7) != "com.br ")){  // verifica final
+            if((text.substr((idx+domain+2), 3) != "com" && text.substr((idx+domain+2), 6) != "com.br")){  // verifica final
                 confirmation = false;
                 continue;
             }
-            if(text.substr((idx+domain+2), 4) == "com " || isblank(text.substr((idx+domain+2), 4).back()))  // adiciona a string
-                emailPiece.append(".com");
-            else if (text.substr((idx+domain+2), 7) == "com.br ")
+            
+            if(!(!isalnum(text.substr((idx+domain+2), 4).back()) || !isalnum(text.substr((idx+domain+2), 7).back()))){  // verifica final
+                confirmation = false;
+                continue;
+            }
+
+            if(text.substr((idx+domain+2), 4).back() == '.')  // adiciona a string
                 emailPiece.append(".com.br");
+            else
+                emailPiece.append(".com");
 
             if(confirmation)  // passou nos testes
                 patternsFound['@'].push_back(emailPiece);
