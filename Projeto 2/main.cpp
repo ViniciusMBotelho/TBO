@@ -38,31 +38,33 @@ int main() {
     // DATA MINING
     
     Aho ahotrie {};
-    string filePath = "dados/emails.txt";
+    string filePath = "dados/dataMining.txt";
     string text = fileReader(filePath);  // le o arquivo e joga para uma string
-    vector<string> patterns {"@", "(", "/"};  // email patterns para buscar
+    vector<string> patterns {"@", "(", "/"};  // patterns para buscar
     map<char, vector<int>> patternIdx;  // indice dos padrões
     map<char, vector<string>> patternsFound;  // padrões encontrados no texto
 
-    // patternIdx['@'] = {};
-    // patternIdx['('] = {};
-    // patternIdx['/'] = {};
+    patternIdx['@'] = {};
+    patternIdx['('] = {};
+    patternIdx['/'] = {};
 
-    // for (auto& s : patterns)  // aho-korasick
-    //     ahotrie.add_string(s);
-    // ahotrie.prepare();
-    // patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
+    for (auto& s : patterns)  // aho-korasick
+        ahotrie.add_string(s);
+    ahotrie.prepare();
+    patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
     
-    // verifyPattern(text, patternIdx, patternsFound);
-    // for(const auto& par: patternsFound){  // imprime dados encontrados
-    //     cout << "Chave '" << par.first << "' : ";
-    //     for(string idx: par.second)
-    //         cout << idx << " | ";
-    //     cout << endl;
-    // }
+    verifyPattern(text, patternIdx, patternsFound);
+    for(const auto& par: patternsFound){  // imprime dados encontrados
+        cout << "Chave '" << par.first << "' : ";
+        for(string idx: par.second)
+            cout << idx << " | ";
+        cout << "\n\n";
+    }
+
 
     // VISUALIZAÇÂO DE DADOS
 
+    filePath = "dados/textoVisualizacao.txt";
     map<string, int> wordCounter;
     int i=0;
     
@@ -77,14 +79,15 @@ int main() {
         i++;
     }
 
-    cout << "Total de palavras válidas: " << wordCounter.size() << endl;
     quick(wordCounterArr, 0, wordCounter.size()-1);  // ordena o array
-    for(i=0; i < 10; i++){  // imprime relação palavra : quantidade
+
+    cout << "\n\nTotal de palavras válidas: " << wordCounter.size() << endl;
+    int printSize = wordCounter.size() < 10 ? wordCounter.size() : 10;
+    for(i=0; i < printSize; i++){  // imprime relação palavra : quantidade
         if(wordCounterArr[i].quant < 3) continue;
         cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, wordCounterArr[i].quant) << ";0;0m" << wordCounterArr[i].word << "\x1b[0m" << "' : " << wordCounterArr[i].quant;
         cout << endl;
     }
-
 }
 
 /*Abri um arquivo de texto e retorna em formato de string*/
@@ -132,7 +135,6 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
     if (!idxs.empty()) {
         bool confirmation = true;
         for(int idx: idxs){ 
-            
             confirmation = true;
 
             if(text.substr((idx-14), 14).find_last_of(" ") == 13 || text.substr((idx-14), 14).find_last_of(" ") == string::npos){  // verifica credencial do email
@@ -155,7 +157,7 @@ void verifyEmail(string text, vector<int> idxs, map<char, vector<string>> &patte
                 confirmation = false;
                 continue;
             }
-            if(text.substr((idx+domain+2), 4) == "com ")  // adiciona a string
+            if(text.substr((idx+domain+2), 4) == "com " || isblank(text.substr((idx+domain+2), 4).back()))  // adiciona a string
                 emailPiece.append(".com");
             else if (text.substr((idx+domain+2), 7) == "com.br ")
                 emailPiece.append(".com.br");
@@ -276,7 +278,7 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
     ifstream file;
     vector<string> textWords;
     string word;
-    string exceptDict = {"nos com das lhe tão dos são ele está esta este que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};  // palavras ignoradas
+    string exceptDict = {"nos com das lhe tão dos são ele está esta este por para têm tem uma que umas uns mais mas pode como ser suas seu sua não sim cada"};  // palavras ignoradas
 
     file.open(pathFile);
     while(file >> word){
@@ -328,4 +330,3 @@ void quick(parStrInt wordCounter[], int esq, int dir) {
     if (pivo + 1 <= dir)
         quick(wordCounter, pivo + 1, dir);
 }
-
