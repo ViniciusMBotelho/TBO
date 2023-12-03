@@ -8,11 +8,7 @@
 #include <algorithm>
 #include"Buscar.hpp"
 #include"aho.hpp"
-
-typedef struct {
-    string word;
-    int quant;
-}parStrInt;
+#include"Grafico.hpp"
 
 string fileReader(string filePath);
 void verifyPattern(string text, map<char, vector<int>> patternIdx, map<char, vector<string>> &patternsFound);
@@ -82,12 +78,15 @@ int main() {
     quick(wordCounterArr, 0, wordCounter.size()-1);  // ordena o array
 
     cout << "\n\nTotal de palavras válidas: " << wordCounter.size() << endl;
-    int printSize = wordCounter.size() < 10 ? wordCounter.size() : 10;
+    int printSize = wordCounter.size() < 9 ? wordCounter.size() : 9;
     for(i=0; i < printSize; i++){  // imprime relação palavra : quantidade
         if(wordCounterArr[i].quant < 3) continue;
         cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, wordCounterArr[i].quant) << ";0;0m" << wordCounterArr[i].word << "\x1b[0m" << "' : " << wordCounterArr[i].quant;
         cout << endl;
     }
+    size_t wordCounterSize = sizeof(wordCounterArr) / sizeof(wordCounterArr[0]);
+    WordChart::plotGraphPNG(wordCounterArr, wordCounterSize, "word_chart.png");
+
 }
 
 /*Abri um arquivo de texto e retorna em formato de string*/
