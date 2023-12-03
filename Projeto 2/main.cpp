@@ -44,22 +44,22 @@ int main() {
     map<char, vector<int>> patternIdx;  // indice dos padrões
     map<char, vector<string>> patternsFound;  // padrões encontrados no texto
 
-    patternIdx['@'] = {};
-    patternIdx['('] = {};
-    patternIdx['/'] = {};
+    // patternIdx['@'] = {};
+    // patternIdx['('] = {};
+    // patternIdx['/'] = {};
 
-    for (auto& s : patterns)  // aho-korasick
-        ahotrie.add_string(s);
-    ahotrie.prepare();
-    patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
+    // for (auto& s : patterns)  // aho-korasick
+    //     ahotrie.add_string(s);
+    // ahotrie.prepare();
+    // patternIdx = ahotrie.process(text, patternIdx);  // armazena os índices dos matches
     
-    verifyPattern(text, patternIdx, patternsFound);
-    for(const auto& par: patternsFound){  // imprime dados encontrados
-        cout << "Chave '" << par.first << "' : ";
-        for(string idx: par.second)
-            cout << idx << " | ";
-        cout << endl;
-    }
+    // verifyPattern(text, patternIdx, patternsFound);
+    // for(const auto& par: patternsFound){  // imprime dados encontrados
+    //     cout << "Chave '" << par.first << "' : ";
+    //     for(string idx: par.second)
+    //         cout << idx << " | ";
+    //     cout << endl;
+    // }
 
     // VISUALIZAÇÂO DE DADOS
 
@@ -77,12 +77,14 @@ int main() {
         i++;
     }
 
+    cout << "Total de palavras válidas: " << wordCounter.size() << endl;
     quick(wordCounterArr, 0, wordCounter.size()-1);  // ordena o array
-    for(i=0; i<wordCounter.size(); i++){  // imprime relação palavra : quantidade
+    for(i=0; i < 10; i++){  // imprime relação palavra : quantidade
         if(wordCounterArr[i].quant < 3) continue;
         cout << "Chave '" << "\x1b[38;2;" << colorFunc(maxElement->second, wordCounterArr[i].quant) << ";0;0m" << wordCounterArr[i].word << "\x1b[0m" << "' : " << wordCounterArr[i].quant;
         cout << endl;
     }
+
 }
 
 /*Abri um arquivo de texto e retorna em formato de string*/
@@ -274,18 +276,20 @@ void textClassifier(string pathFile, map<string, int> &wordCounter){
     ifstream file;
     vector<string> textWords;
     string word;
-    string exceptDict = {"com das dos são que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};  // palavras ignoradas
+    string exceptDict = {"nos com das lhe tão dos são ele está esta este que por para têm tem uma que umas uns mais pode como ser suas seu sua não sim cada"};  // palavras ignoradas
 
     file.open(pathFile);
     while(file >> word){
         word[0] = tolower(word[0]);
-        if(!isalpha(word.back())) 
+        if(word.size() < 3) continue;
+
+        if(!isalnum(word.back())) 
             word.pop_back();  // último caractere não alfa-numérico
 
-        if(!isalpha(word.at(0)))
+        if(!isalnum(word.at(0)))
             word.erase(0,1);  // primeiro caractere não alfa-numérico
         
-        if((word.length() < 3) || (Buscar::KMP(exceptDict, word) != -1)) continue;
+        if(Buscar::KMP(exceptDict, word) != -1) continue;  // verifica se está em exceptDict
 
         if(wordCounter.find(word) == wordCounter.end())  // palavra nova
             wordCounter[word] = 1;
