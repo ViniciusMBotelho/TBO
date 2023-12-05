@@ -24,12 +24,12 @@ int main() {
 
     // KMP e KMP_mult
 
-    // string text = "ABABDABACDABABCABAB";
-    // string pattern = "AB";
-    // vector<int> idx_patterns = Buscar::KMP_mult(text, pattern);
-    // for(int idx: idx_patterns)
-    //     cout << "idx: " << idx << '\n';
-
+    string textKMP = "ABABDABACDABABCABAB"; 
+    string patternKMP = "AB";
+    vector<int> idx_patterns = Buscar::KMP_mult(textKMP, patternKMP);  // Chamada do KMP
+    for(int idx: idx_patterns)  // Imprime os índices encontrados
+        cout << "idx: " << idx << '\n';
+    cout << "\n\n";
 
     // DATA MINING
     
@@ -54,7 +54,7 @@ int main() {
         cout << "Chave '" << par.first << "' : ";
         for(string idx: par.second)
             cout << idx << " | ";
-        cout << "\n\n";
+        cout << "\n";
     }
 
 
@@ -241,7 +241,7 @@ void verifyDate(string text, vector<int> idxs, map<char, vector<string>> &patter
     if(!idxs.empty()){
         bool confirmation = true;
         for(int idx: idxs){
-
+            
             confirmation = true;
 
             if(!isNumeric(text.substr(idx-2,2))){
